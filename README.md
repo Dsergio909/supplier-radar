@@ -120,9 +120,9 @@ To try the demo locally, open `demo/index.html` in a browser.
 
 ## About
 
-Built by **Sergio García**, an International Business student in Bogotá who likes turning repetitive work into automated systems. I don't come from engineering: I learned to code by building, using generative AI as a pair programmer. The original system was written in Google Apps Script with help from ChatGPT and Gemini; this public version was rebuilt with Claude Code.
+Built by **Sergio García**, an International Business graduate (diploma pending) based in Bogotá who likes turning repetitive work into automated systems. I don't come from engineering: I learned to code by building, using generative AI as a pair programmer. The original system was written in Google Apps Script with help from ChatGPT and Gemini; this public version was rebuilt with Claude Code.
 
-[LinkedIn](https://linkedin.com/in/sergio-david-garcia-celis-836b8a250) · [dsergio909@gmail.com](mailto:dsergio909@gmail.com)
+[Portfolio](https://dsergio909.github.io/) · [LinkedIn](https://linkedin.com/in/sergio-david-garcia-celis-836b8a250) · [dsergio909@gmail.com](mailto:dsergio909@gmail.com)
 
 ---
 
