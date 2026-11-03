@@ -16,6 +16,7 @@ test('explains review cases with reason and evidence', () => {
   assert.equal(explain(weak, 'es'), 'solo evidencia débil: el nombre coincide en 100%');
   const tie = classifyEmail(inbox.find((m) => m.id === 'E4'), suppliers);
   assert.equal(explain(tie, 'en'), '2 suppliers tie at medium confidence');
+  assert.equal(explain(tie, 'es'), '2 proveedores empatan con confianza media');
 });
 
 test('every code produced on the sample data has a template in every language', () => {

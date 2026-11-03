@@ -18,14 +18,14 @@ Lo que el sistema no puede decidir con seguridad no lo adivina: lo deja en una h
 
 ## Cómo decide de quién es un correo
 
-Cada correo se compara con la lista de proveedores y recibe un nivel de confianza:
+Cada correo se compara con la lista de proveedores y recibe un nivel de confianza. En la hoja `Registro` aparece con su código en inglés (`exact`, `high`, `medium`, `low`).
 
 | Nivel | Qué tiene que pasar | Qué hace |
 |---|---|---|
-| **EXACT** | El remitente está registrado **y** el correo cita el número de contrato | Confirma |
-| **HIGH** | El remitente está registrado | Confirma |
-| **MEDIUM** | El correo viene del dominio corporativo del proveedor (nunca Gmail, Hotmail ni similares) | Confirma si ese dominio es de un solo proveedor; si lo comparten dos, va a revisión |
-| **LOW** | Solo hay un nombre parecido, o un número de contrato enviado desde un correo desconocido | Siempre va a revisión |
+| **Exacta** | El remitente está registrado **y** el correo cita el número de contrato | Confirma |
+| **Alta** | El remitente está registrado | Confirma |
+| **Media** | El correo viene del dominio corporativo del proveedor (nunca Gmail, Hotmail ni similares) | Confirma si ese dominio es de un solo proveedor; si lo comparten dos, va a revisión |
+| **Baja** | Solo hay un nombre parecido, o un número de contrato enviado desde un correo desconocido | Siempre va a revisión |
 | — | No hay ninguna señal de un proveedor (por ejemplo, publicidad) | Se ignora |
 
 **Por qué así:** una confirmación equivocada marca *al día* a un proveedor que no lo está, y eso puede terminar en un pago o un contrato sin respaldo. Mandar un caso de más a revisión cuesta unos segundos. Por eso el sistema prefiere preguntar.

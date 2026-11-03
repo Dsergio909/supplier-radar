@@ -33,6 +33,7 @@
       status: { expired: 'Vencido', 'at-risk': 'En riesgo', expiring: 'Por vencer', active: 'Al día' },
       decision: { confirmed: 'Confirmado', review: 'A revisión', unmatched: 'Ignorado' },
       spoof: 'Posible suplantación',
+      conf: 'Confianza', tier: { exact: 'Exacta', high: 'Alta', medium: 'Media', low: 'Baja' },
       assign: 'Asignar a', discard: 'Descartar', stale: 'desactualizado',
       docsReceived: 'Recibidos', docsRequested: 'Solicitados', docsNone: 'Sin solicitar',
       themeDark: 'Cambiar a modo oscuro', themeLight: 'Cambiar a modo claro'
@@ -67,6 +68,7 @@
       status: { expired: 'Expired', 'at-risk': 'At risk', expiring: 'Expiring', active: 'Up to date' },
       decision: { confirmed: 'Confirmed', review: 'To review', unmatched: 'Ignored' },
       spoof: 'Possible spoofing',
+      conf: 'Confidence', tier: { exact: 'Exact', high: 'High', medium: 'Medium', low: 'Low' },
       assign: 'Assign to', discard: 'Discard', stale: 'stale',
       docsReceived: 'Received', docsRequested: 'Requested', docsNone: 'Not requested',
       themeDark: 'Switch to dark mode', themeLight: 'Switch to light mode'
@@ -203,6 +205,9 @@
       b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang));
     });
     $('howLink').href = DOCS_URL[lang];
+    document.querySelectorAll('[data-tier]').forEach(function (node) {
+      node.textContent = t('tier')[node.getAttribute('data-tier')];
+    });
     $('theme').setAttribute('aria-label', isDark() ? t('themeLight') : t('themeDark'));
     $('theme').title = $('theme').getAttribute('aria-label');
     $('today').textContent = today();
@@ -260,14 +265,17 @@
 
   function outcome(result, withDecision) {
     var box = el('div', 'outcome');
-    if (isSpoof(result)) box.appendChild(el('span', 'dec alert', t('spoof')));
-    else if (withDecision) box.appendChild(el('span', 'dec ' + result.decision, t('decision')[result.decision]));
-    if (result.tier) box.appendChild(el('span', 'code ' + result.tier, result.tier.toUpperCase()));
+    if (isSpoof(result)) box.appendChild(el('span', 'tag alert', t('spoof')));
+    else if (withDecision) box.appendChild(el('span', 'tag ' + result.decision, t('decision')[result.decision]));
     return box;
   }
 
   function whyLine(result) {
     var line = el('div', 'why');
+    if (result.tier) {
+      line.appendChild(el('span', 'conf', t('conf') + ' ' + t('tier')[result.tier].toLowerCase()));
+      line.appendChild(document.createTextNode(' · '));
+    }
     if (result.supplierId) {
       line.appendChild(el('b', '', supplierById(result.supplierId).name));
       line.appendChild(document.createTextNode(' · '));
@@ -341,10 +349,10 @@
     var td = el('td', 'nowrap');
     if (received !== null && (requested === null || received >= requested)) {
       td.appendChild(el('span', '', '✓ ' + t('docsReceived') + ' '));
-      td.appendChild(el('span', 'mono muted', s.docsReceivedAt));
+      td.appendChild(el('span', 'date', s.docsReceivedAt));
     } else if (requested !== null) {
       td.appendChild(el('span', '', t('docsRequested') + ' '));
-      td.appendChild(el('span', 'mono muted', s.docsRequestedAt));
+      td.appendChild(el('span', 'date', s.docsRequestedAt));
     } else {
       td.appendChild(el('span', 'muted', t('docsNone')));
     }

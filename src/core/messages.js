@@ -42,6 +42,12 @@
     }
   };
 
+  // Tier names inside sentences ("empatan con confianza media").
+  var TIER_NAMES = {
+    es: { exact: 'exacta', high: 'alta', medium: 'media', low: 'baja' },
+    en: { exact: 'exact', high: 'high', medium: 'medium', low: 'low' }
+  };
+
   function has(lang, code) {
     return !!(TEMPLATES[lang] && TEMPLATES[lang][code]);
   }
@@ -49,8 +55,11 @@
   /** One { code, ...params } item as a sentence fragment. */
   function format(item, lang) {
     var template = (TEMPLATES[lang] || TEMPLATES.en)[item.code] || item.code;
+    var tiers = TIER_NAMES[lang] || TIER_NAMES.en;
     return template.replace(/\{(\w+)\}/g, function (_, key) {
-      return item[key] === undefined ? '' : String(item[key]);
+      if (item[key] === undefined) return '';
+      if (key === 'tier' && tiers[item[key]]) return tiers[item[key]];
+      return String(item[key]);
     });
   }
 

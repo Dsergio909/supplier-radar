@@ -63,7 +63,7 @@ test('scanInbox logs each message once, files confirmed documents and queues the
   const review = env.book['Revisión'].data.slice(1);
   assert.deepEqual(review.map((r) => r[7]), ['m-E4', 'm-E5', 'm-E6', 'm-E10']);
   assert.match(review[3][4], /NO verificado/, 'spoofed sender goes to review, not confirmed');
-  assert.equal(review[0][4], '2 proveedores empatan con confianza medium');
+  assert.equal(review[0][4], '2 proveedores empatan con confianza media');
 
   for (const id of ['S01', 'S02', 'S03', 'S04', 'S06', 'S09']) {
     assert.ok(isDate(env.cell(id, 'docsReceivedAt')), `${id} should have documents recorded`);
