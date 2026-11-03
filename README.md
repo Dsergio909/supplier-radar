@@ -6,14 +6,14 @@
 Confidence-tiered email matching · human-in-the-loop review · dashboards computed from dates only.
 
 [![CI](https://github.com/Dsergio909/supplier-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/Dsergio909/supplier-radar/actions/workflows/ci.yml)
-![Google Apps Script](https://img.shields.io/badge/Google_Apps_Script-4285F4?logo=google&logoColor=white)
-![Paid tools: 0](https://img.shields.io/badge/paid_tools-0-39ff88)
-![Dependencies: 0](https://img.shields.io/badge/dependencies-0-39ff88)
+![Google Apps Script](https://img.shields.io/badge/Google_Apps_Script-4285F4?logo=googleappsscript&logoColor=white)
+![Paid tools: 0](https://img.shields.io/badge/paid_tools-0-15803d)
+![Dependencies: 0](https://img.shields.io/badge/dependencies-0-15803d)
 ![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)
 
-[**▶ Live demo**](https://dsergio909.github.io/supplier-radar/) · [🇪🇸 Resumen en español](#-resumen-en-español)
+[**▶ Live demo**](https://dsergio909.github.io/supplier-radar/) · [How it works](docs/how-it-works.md) · [Cómo funciona (español)](docs/como-funciona.md)
 
-<img src="docs/screenshot.png" alt="Supplier Radar demo: KPI tiles, an inbox classified by confidence tier and a human review queue" width="100%">
+<img src="docs/screenshot.png" alt="Supplier Radar demo: three-step guide, status counters, an inbox classified by confidence tier and a human review queue" width="100%">
 
 </div>
 
@@ -21,7 +21,9 @@ Confidence-tiered email matching · human-in-the-loop review · dashboards compu
 
 Keeping supplier documents and contracts up to date meant sending requests one by one, digging replies out of Gmail and trusting a spreadsheet "status" column that, in practice, nobody kept current.
 
-During my internship in purchasing at Smart Training Society I built, on my own initiative and with no budget, a system on Google Workspace that does this automatically. This repository is a **public, tested rebuild** of that design with synthetic data. It contains no company code or data.
+I saw this problem first-hand during my procurement internship. Supplier Radar is an independent project that solves it on Google Workspace, with no budget and no paid tools. Everything here is original, tested and runs on fictional data.
+
+The full walkthrough, from the matching rules to installing it in a Google Sheet, is in **[How it works](docs/how-it-works.md)** ([español](docs/como-funciona.md)).
 
 ## What it does
 
@@ -60,7 +62,7 @@ And no match is ever confirmed if Gmail could not authenticate the sender (SPF/D
 | Formula injection: an email subject like `=IMPORTXML(...)` running in the sheet | Every email-controlled value is written as plain text. |
 | Duplicate or racing executions (hourly trigger + manual run) | A script lock allows one execution at a time, and each message id is processed only once. |
 | Leaking real data from this public repo | All names, addresses and contracts are fictional. Corporate domains use the reserved `.example` TLD. No company code or data. |
-| Demo page (XSS, third parties) | Content is rendered with `textContent` only; a strict Content-Security-Policy allows scripts from the site itself and fonts from Google Fonts, nothing else. No cookies, trackers or forms. |
+| Demo page (XSS, third parties) | Content is rendered with `textContent` only; a strict Content-Security-Policy allows scripts, styles and fonts from the site itself, nothing else (fonts are self-hosted). No cookies, trackers or forms; only the light/dark choice is remembered in the browser. |
 | CI supply chain | Workflows use read-only permissions and do not persist credentials; the project has zero npm dependencies. |
 
 Known limit: the classifier reads text, not attachment contents. Someone who controls a supplier's real mailbox can still send documents, which is why the audit log keeps every decision.
@@ -88,8 +90,10 @@ src/core/compliance.js   date-derived status and KPIs
 src/core/messages.js     human-readable explanations (ES / EN)
 src/data/sample.js       synthetic suppliers and emails
 apps-script/Code.js      Gmail · Sheets · Drive adapter
+apps-script/core_*.js    copies of src/core, ready to paste (a test keeps them in sync)
 apps-script/*.csv        template for the Proveedores sheet
 demo/                    interactive browser demo
+docs/                    how it works, in Spanish and English
 tests/                   unit tests, plus the Apps Script adapter run end-to-end
                          against in-memory fakes of SpreadsheetApp, GmailApp and DriveApp
 ```
@@ -102,15 +106,18 @@ Requires Node 22+ and nothing else: there are no dependencies to install.
 npm test          # runs the whole suite
 ```
 
-To try the demo locally, open `demo/index.html` in a browser.
+To try the demo locally, serve the repository root (for example `npx http-server .`) and open `/demo/`.
 
-### Deploy to Google Apps Script
+### Install it in Google Sheets
+
+No Node needed: the `apps-script/` folder is ready to paste.
 
 1. Create a Google Sheet with a tab named `Proveedores`. Import [`apps-script/Proveedores-plantilla.csv`](apps-script/Proveedores-plantilla.csv) to get the headers, then replace the example rows with your suppliers. Use the status codes `expired`, `at-risk`, `expiring` or `active` in `manualStatus`, or leave it empty.
-2. Run `npm run build:gas`. It copies the core files into `apps-script/`.
-3. In the sheet, open **Extensions → Apps Script** and create one script file per file in `apps-script/`, pasting its contents. If you use [clasp](https://github.com/google/clasp), push that folder instead.
-4. Optional: add a script property `DRIVE_FOLDER_ID` with the id of the Drive folder where documents should be filed.
-5. Reload the sheet and use the new **Supplier Radar** menu. **Instalar ejecución automática** schedules the inbox scan every hour and the requests every day.
+2. In the sheet, open **Extensions → Apps Script** and create one script file per `.js` file in `apps-script/` (`Code.js` and the three `core_*.js`), pasting its contents. If you use [clasp](https://github.com/google/clasp), push that folder instead.
+3. Optional: add a script property `DRIVE_FOLDER_ID` with the id of the Drive folder where documents should be filed.
+4. Reload the sheet and use the new **Supplier Radar** menu. **Instalar ejecución automática** scans the inbox every hour and sends requests every day.
+
+If you change `src/core`, run `npm run build:gas` to refresh the copies; the test suite fails until you do.
 
 ## Roadmap
 
@@ -120,7 +127,7 @@ To try the demo locally, open `demo/index.html` in a browser.
 
 ## About
 
-Built by **Sergio García**, an International Business graduate (diploma pending) based in Bogotá who likes turning repetitive work into automated systems. I don't come from engineering: I learned to code by building, using generative AI as a pair programmer. The original system was written in Google Apps Script with help from ChatGPT and Gemini; this public version was rebuilt with Claude Code.
+Built by **Sergio García**, an International Business graduate (diploma pending) based in Bogotá who likes turning repetitive work into automated systems. I don't come from engineering: I learned to code by building, using generative AI as a pair programmer. Supplier Radar was built with Claude Code: I designed the rules and reviewed every decision.
 
 [Portfolio](https://dsergio909.github.io/) · [LinkedIn](https://linkedin.com/in/sergio-david-garcia-celis-836b8a250) · [dsergio909@gmail.com](mailto:dsergio909@gmail.com)
 
@@ -137,7 +144,7 @@ Built by **Sergio García**, an International Business graduate (diploma pending
 - **Archiva los adjuntos** en Drive, en una carpeta por proveedor.
 - **El tablero se calcula solo con fechas**: vencidos, en riesgo, por vencer y al día. No depende de columnas de estado que nadie actualiza.
 
-Todos los datos son ficticios (dominios `.example`). Es la versión pública, con pruebas automáticas, del sistema que construí en mis prácticas en Smart Training Society. No contiene código ni datos de la empresa. [Ver la demo en vivo](https://dsergio909.github.io/supplier-radar/).
+Todos los datos son ficticios (dominios `.example`). Es un proyecto independiente, con pruebas automáticas, que nace de un problema que vi en mis prácticas de compras. [Ver la demo en vivo](https://dsergio909.github.io/supplier-radar/) · [Cómo funciona, paso a paso](docs/como-funciona.md).
 
 ## License
 

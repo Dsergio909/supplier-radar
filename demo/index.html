@@ -3,86 +3,110 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
 <title>Supplier Radar · demo</title>
-<meta name="description" content="Supplier & contract compliance automation with confidence-tiered email classification and human-in-the-loop review.">
+<meta name="description" content="Supplier and contract compliance automation with confidence-tiered email matching and human review.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Supplier Radar · supplier and contract automation">
-<meta property="og:description" content="Live demo: confidence-tiered email matching, human-in-the-loop review and dashboards computed from dates only. Built on Google Workspace, zero paid tools.">
+<meta property="og:description" content="Live demo: confidence-tiered email matching, human review for anything uncertain and a dashboard computed from dates. Built on Google Workspace, zero paid tools.">
 <meta property="og:url" content="https://dsergio909.github.io/supplier-radar/">
 <meta property="og:image" content="https://dsergio909.github.io/supplier-radar/demo/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top">
-  <div class="brand">
-    <svg class="logo" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
-      <rect x="6" y="1" width="4" height="1" fill="var(--green)"/><rect x="3" y="2" width="3" height="1" fill="var(--green)"/><rect x="10" y="2" width="3" height="1" fill="var(--green)"/>
-      <rect x="2" y="3" width="1" height="3" fill="var(--green)"/><rect x="13" y="3" width="1" height="3" fill="var(--green)"/>
-      <rect x="1" y="6" width="1" height="4" fill="var(--green)"/><rect x="14" y="6" width="1" height="4" fill="var(--green)"/>
-      <rect x="2" y="10" width="1" height="3" fill="var(--green)"/><rect x="13" y="10" width="1" height="3" fill="var(--green)"/>
-      <rect x="3" y="13" width="3" height="1" fill="var(--green)"/><rect x="10" y="13" width="3" height="1" fill="var(--green)"/><rect x="6" y="14" width="4" height="1" fill="var(--green)"/>
-      <rect x="7" y="7" width="2" height="2" fill="var(--blue)"/><rect x="9" y="5" width="1" height="2" fill="var(--blue)"/><rect x="10" y="4" width="1" height="1" fill="var(--blue)"/>
-      <rect x="4" y="9" width="1" height="1" fill="var(--pink)"/><rect x="11" y="10" width="1" height="1" fill="var(--pink)"/>
-    </svg>
-    <div>
-      <h1>SUPPLIER RADAR</h1>
-      <p class="tag" data-i18n="tagline"></p>
-    </div>
-  </div>
-  <div class="lang" role="group" aria-label="Language">
-    <button data-lang="es">ES</button><button data-lang="en">EN</button>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="./" aria-label="Supplier Radar">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2" opacity=".35"/>
+        <circle cx="16" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="2" opacity=".6"/>
+        <path d="M16 16 L26 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="16" cy="16" r="2.6" fill="currentColor"/>
+        <circle cx="22" cy="21" r="2" fill="var(--warn)"/>
+      </svg>
+      <span>
+        <strong>Supplier Radar</strong>
+        <small data-i18n="tagline"></small>
+      </span>
+    </a>
+    <nav class="tools">
+      <a class="link" id="howLink" href="https://github.com/Dsergio909/supplier-radar/blob/main/docs/como-funciona.md" data-i18n="howLink"></a>
+      <div class="segmented" role="group" aria-label="Idioma / Language">
+        <button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button>
+      </div>
+      <button type="button" class="icon-btn" id="theme" aria-label="Cambiar tema">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="currentColor"/></svg>
+      </button>
+    </nav>
   </div>
 </header>
 
-<main>
-  <section class="intro panel">
-    <p data-i18n="intro"></p>
-    <label class="clock">
-      <span><span data-i18n="simDate"></span> <strong id="today"></strong></span>
-      <input id="dayOffset" type="range" min="0" max="120" value="0" aria-describedby="clockHint">
-      <small id="clockHint" data-i18n="clockHint"></small>
-    </label>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <p class="eyebrow"><span class="badge neutral" data-i18n="sampleData"></span></p>
+      <h1 data-i18n="heroTitle"></h1>
+      <p class="lead" data-i18n="intro"></p>
+    </div>
+    <ol class="steps" id="steps">
+      <li data-step="1"><span class="num">1</span><span><strong data-i18n="step1"></strong><small data-i18n="step1Hint"></small></span></li>
+      <li data-step="2"><span class="num">2</span><span><strong data-i18n="step2"></strong><small data-i18n="step2Hint"></small></span></li>
+      <li data-step="3"><span class="num">3</span><span><strong data-i18n="step3"></strong><small data-i18n="step3Hint"></small></span></li>
+    </ol>
   </section>
 
   <section class="kpis" id="kpis" aria-live="polite"></section>
 
   <div class="grid">
-    <section class="panel">
-      <div class="panel-head">
-        <h2 data-i18n="inbox"></h2>
-        <div class="actions">
-          <button id="process" class="btn primary" data-i18n="process"></button>
-          <button id="reset" class="btn" data-i18n="reset"></button>
+    <section class="card">
+      <header class="card-head">
+        <div>
+          <h2 data-i18n="inbox"></h2>
+          <p class="sub" id="inboxSub"></p>
         </div>
-      </div>
-      <ol id="inbox" class="list"></ol>
+        <div class="actions">
+          <button type="button" id="reset" class="btn ghost" data-i18n="reset"></button>
+          <button type="button" id="process" class="btn primary" data-i18n="process"></button>
+        </div>
+      </header>
+      <div class="progress" id="progress" hidden><span id="progressBar"></span></div>
+      <ol id="inbox" class="mails"></ol>
     </section>
 
-    <section class="panel">
-      <div class="panel-head">
-        <h2><span data-i18n="review"></span> <span id="reviewCount" class="count"></span></h2>
-      </div>
-      <p class="hint" data-i18n="reviewHint"></p>
-      <ol id="review" class="list"></ol>
+    <section class="card review-card">
+      <header class="card-head">
+        <div>
+          <h2><span data-i18n="review"></span> <span id="reviewCount" class="count" hidden></span></h2>
+          <p class="sub" data-i18n="reviewHint"></p>
+        </div>
+      </header>
+      <ol id="review" class="mails"></ol>
     </section>
   </div>
 
-  <section class="panel">
-    <div class="panel-head"><h2 data-i18n="suppliers"></h2></div>
+  <section class="card">
+    <header class="card-head wrap-head">
+      <div>
+        <h2 data-i18n="suppliers"></h2>
+        <p class="sub" data-i18n="suppliersHint"></p>
+      </div>
+      <label class="clock">
+        <span><span data-i18n="simDate"></span> <strong id="today"></strong></span>
+        <input id="dayOffset" type="range" min="0" max="120" value="0" aria-describedby="clockHint">
+        <small id="clockHint" data-i18n="clockHint"></small>
+      </label>
+    </header>
     <div class="table-wrap">
       <table>
         <thead><tr>
-          <th data-i18n="colSupplier"></th><th data-i18n="colContract"></th><th data-i18n="colStatus"></th>
-          <th data-i18n="colDays"></th><th data-i18n="colDocs"></th><th data-i18n="colReason"></th>
+          <th data-i18n="colSupplier"></th><th data-i18n="colStatus"></th>
+          <th class="num" data-i18n="colDays"></th><th data-i18n="colDocs"></th><th data-i18n="colReason"></th>
           <th data-i18n="colManual"></th>
         </tr></thead>
         <tbody id="suppliers"></tbody>
@@ -90,20 +114,20 @@
     </div>
   </section>
 
-  <section class="panel legend">
-    <h2 data-i18n="howTitle"></h2>
-    <ol class="tiers">
-      <li><span class="chip exact">EXACT</span> <span data-i18n="tierExact"></span></li>
-      <li><span class="chip high">HIGH</span> <span data-i18n="tierHigh"></span></li>
-      <li><span class="chip medium">MEDIUM</span> <span data-i18n="tierMedium"></span></li>
-      <li><span class="chip low">LOW</span> <span data-i18n="tierLow"></span></li>
-    </ol>
+  <section class="card">
+    <header class="card-head"><div><h2 data-i18n="howTitle"></h2><p class="sub" data-i18n="howSub"></p></div></header>
+    <ul class="tiers">
+      <li><span class="tag exact">EXACT</span><p data-i18n="tierExact"></p></li>
+      <li><span class="tag high">HIGH</span><p data-i18n="tierHigh"></p></li>
+      <li><span class="tag medium">MEDIUM</span><p data-i18n="tierMedium"></p></li>
+      <li><span class="tag low">LOW</span><p data-i18n="tierLow"></p></li>
+    </ul>
   </section>
 </main>
 
-<footer>
+<footer class="wrap footer">
   <span data-i18n="footer"></span>
-  <a href="https://github.com/Dsergio909/supplier-radar">GitHub ↗</a>
+  <span><a href="https://github.com/Dsergio909/supplier-radar">GitHub</a> · <a href="https://dsergio909.github.io/">Sergio García</a></span>
 </footer>
 
 <script src="../src/core/classifier.js"></script>

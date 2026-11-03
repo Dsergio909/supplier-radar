@@ -4,62 +4,92 @@
 
   var I18N = {
     es: {
-      tagline: '> automatización de proveedores y contratos · humano en el circuito',
-      intro: 'Versión pública del sistema que construí en mis prácticas: lee la bandeja de entrada, identifica qué proveedor respondió con niveles de confianza, confirma solo lo seguro y manda lo dudoso a revisión humana. El tablero se calcula únicamente con fechas. Datos 100% sintéticos.',
-      simDate: 'Fecha simulada:',
-      clockHint: 'Adelanta el tiempo y mira cómo cambian los estados.',
-      inbox: 'BANDEJA DE ENTRADA', process: '▶ PROCESAR', reset: '↺ REINICIAR',
-      review: 'REVISIÓN HUMANA',
-      reviewHint: 'Casos ambiguos: el sistema no adivina, te muestra la evidencia y tú decides.',
-      reviewEmpty: 'Nada pendiente. Procesa la bandeja para llenar esta cola.',
-      suppliers: 'PROVEEDORES',
-      colSupplier: 'Proveedor', colContract: 'Contrato', colStatus: 'Estado', colDays: 'Días', colDocs: 'Documentos',
-      colReason: 'Motivo', colManual: 'Estado manual (hoja)',
-      howTitle: 'NIVELES DE CONFIANZA',
-      tierExact: 'Remitente registrado + número de contrato en el correo → se confirma.',
-      tierHigh: 'Remitente registrado → se confirma.',
-      tierMedium: 'Dominio corporativo del proveedor (nunca gmail/hotmail) → se confirma si es único; si dos proveedores comparten dominio, va a revisión.',
-      tierLow: 'Solo nombre parecido, o número de contrato desde un correo desconocido → siempre revisión humana.',
-      footer: 'Datos sintéticos · lógica real en src/core · cubierta por tests',
+      tagline: 'Control de proveedores y contratos',
+      howLink: 'Cómo funciona',
+      sampleData: 'Demo con datos de ejemplo',
+      heroTitle: 'Sabe qué proveedor respondió y quién está al día, sin revisar el correo a mano.',
+      intro: 'Supplier Radar lee la bandeja de entrada, reconoce qué proveedor envió cada correo con niveles de confianza, confirma solo lo seguro y te pasa lo dudoso para que decidas. El estado de cada proveedor se calcula con las fechas del contrato y de los documentos.',
+      step1: 'Procesa la bandeja', step1Hint: 'El sistema clasifica los 10 correos de ejemplo.',
+      step2: 'Resuelve los casos dudosos', step2Hint: 'Revisa la evidencia y asigna o descarta.',
+      step3: 'Revisa el estado de tus proveedores', step3Hint: 'Adelanta la fecha y mira cómo cambian.',
+      inbox: 'Bandeja de entrada', process: 'Procesar bandeja', reset: 'Reiniciar',
+      inboxIdle: '{n} correos sin procesar', inboxBusy: 'Procesando {i} de {n}…', inboxDone: 'Confirmados: {c} · A revisión: {r} · Ignorados: {u}',
+      review: 'Revisión humana',
+      reviewHint: 'El sistema no adivina: te muestra la evidencia y tú decides.',
+      reviewEmptyTitle: 'Nada pendiente',
+      reviewEmpty: 'Procesa la bandeja: aquí aparecen los correos que no se pueden asignar con seguridad.',
+      reviewDone: 'Todos los casos dudosos están resueltos.',
+      suppliers: 'Proveedores',
+      suppliersHint: 'Ordenados por urgencia. El estado sale de las fechas, no de lo que alguien escribió en la hoja.',
+      simDate: 'Fecha simulada:', clockHint: 'Mueve la barra para adelantar el tiempo.',
+      colSupplier: 'Proveedor', colStatus: 'Estado', colDays: 'Días de contrato', colDocs: 'Documentos',
+      colReason: 'Motivo', colManual: 'Estado escrito en la hoja',
+      howTitle: 'Niveles de confianza', howSub: 'Cómo decide el sistema si un correo es de un proveedor.',
+      tierExact: 'Remitente registrado y número de contrato en el correo: se confirma.',
+      tierHigh: 'Remitente registrado: se confirma.',
+      tierMedium: 'Dominio corporativo del proveedor (nunca Gmail u Hotmail): se confirma si es único; si dos proveedores lo comparten, va a revisión.',
+      tierLow: 'Solo un nombre parecido o un número de contrato desde un correo desconocido: siempre va a revisión.',
+      footer: 'Datos ficticios · la lógica de src/core está cubierta por pruebas automáticas',
       kpi: { expired: 'Vencidos', 'at-risk': 'En riesgo', expiring: 'Por vencer (30 días)', active: 'Al día' },
-      status: { expired: 'VENCIDO', 'at-risk': 'EN RIESGO', expiring: 'POR VENCER', active: 'AL DÍA' },
-      decision: { confirmed: 'CONFIRMADO', review: 'A REVISIÓN', unmatched: 'IGNORADO' },
+      status: { expired: 'Vencido', 'at-risk': 'En riesgo', expiring: 'Por vencer', active: 'Al día' },
+      decision: { confirmed: 'Confirmado', review: 'A revisión', unmatched: 'Ignorado' },
+      spoof: 'Posible suplantación',
       assign: 'Asignar a', discard: 'Descartar', stale: 'desactualizado',
-      docsReceived: 'recibidos', docsRequested: 'solicitados'
+      docsReceived: 'Recibidos', docsRequested: 'Solicitados', docsNone: 'Sin solicitar',
+      themeDark: 'Cambiar a modo oscuro', themeLight: 'Cambiar a modo claro'
     },
     en: {
-      tagline: '> supplier & contract automation · human in the loop',
-      intro: 'Public version of the system I built during my internship: it reads the inbox, works out which supplier replied using confidence tiers, confirms only the safe matches and sends anything doubtful to human review. The dashboard is computed from dates alone. 100% synthetic data.',
-      simDate: 'Simulated date:',
-      clockHint: 'Move time forward and watch the statuses change.',
-      inbox: 'INBOX', process: '▶ PROCESS', reset: '↺ RESET',
-      review: 'HUMAN REVIEW',
-      reviewHint: 'Ambiguous cases: the system does not guess, it shows the evidence and you decide.',
-      reviewEmpty: 'Nothing pending. Process the inbox to fill this queue.',
-      suppliers: 'SUPPLIERS',
-      colSupplier: 'Supplier', colContract: 'Contract', colStatus: 'Status', colDays: 'Days', colDocs: 'Documents',
-      colReason: 'Reason', colManual: 'Manual status (sheet)',
-      howTitle: 'CONFIDENCE TIERS',
-      tierExact: 'Registered sender + contract number in the email → confirmed.',
-      tierHigh: 'Registered sender → confirmed.',
-      tierMedium: 'Supplier corporate domain (never gmail/hotmail) → confirmed if unique; if two suppliers share the domain, it goes to review.',
-      tierLow: 'Only a similar name, or a contract number from an unknown address → always human review.',
-      footer: 'Synthetic data · real logic in src/core · covered by tests',
+      tagline: 'Supplier and contract control',
+      howLink: 'How it works',
+      sampleData: 'Demo with sample data',
+      heroTitle: 'Know which supplier replied and who is up to date, without combing through email.',
+      intro: 'Supplier Radar reads the inbox, works out which supplier sent each email using confidence tiers, confirms only the safe matches and hands you anything doubtful to decide. Each supplier’s status is computed from contract and document dates.',
+      step1: 'Process the inbox', step1Hint: 'The system classifies the 10 sample emails.',
+      step2: 'Resolve the doubtful cases', step2Hint: 'Check the evidence, then assign or discard.',
+      step3: 'Check your suppliers', step3Hint: 'Move the date forward and watch them change.',
+      inbox: 'Inbox', process: 'Process inbox', reset: 'Reset',
+      inboxIdle: '{n} unprocessed emails', inboxBusy: 'Processing {i} of {n}…', inboxDone: 'Confirmed: {c} · To review: {r} · Ignored: {u}',
+      review: 'Human review',
+      reviewHint: 'The system does not guess: it shows the evidence and you decide.',
+      reviewEmptyTitle: 'Nothing pending',
+      reviewEmpty: 'Process the inbox: emails that cannot be matched safely show up here.',
+      reviewDone: 'Every doubtful case is resolved.',
+      suppliers: 'Suppliers',
+      suppliersHint: 'Sorted by urgency. Status comes from dates, not from what someone typed in the sheet.',
+      simDate: 'Simulated date:', clockHint: 'Drag to move time forward.',
+      colSupplier: 'Supplier', colStatus: 'Status', colDays: 'Contract days', colDocs: 'Documents',
+      colReason: 'Reason', colManual: 'Status typed in the sheet',
+      howTitle: 'Confidence tiers', howSub: 'How the system decides whether an email comes from a supplier.',
+      tierExact: 'Registered sender and contract number in the email: confirmed.',
+      tierHigh: 'Registered sender: confirmed.',
+      tierMedium: 'Supplier corporate domain (never Gmail or Hotmail): confirmed if unique; if two suppliers share it, it goes to review.',
+      tierLow: 'Only a similar name, or a contract number from an unknown address: always goes to review.',
+      footer: 'Fictional data · the logic in src/core is covered by automated tests',
       kpi: { expired: 'Expired', 'at-risk': 'At risk', expiring: 'Expiring (30 days)', active: 'Up to date' },
-      status: { expired: 'EXPIRED', 'at-risk': 'AT RISK', expiring: 'EXPIRING', active: 'UP TO DATE' },
-      decision: { confirmed: 'CONFIRMED', review: 'TO REVIEW', unmatched: 'IGNORED' },
+      status: { expired: 'Expired', 'at-risk': 'At risk', expiring: 'Expiring', active: 'Up to date' },
+      decision: { confirmed: 'Confirmed', review: 'To review', unmatched: 'Ignored' },
+      spoof: 'Possible spoofing',
       assign: 'Assign to', discard: 'Discard', stale: 'stale',
-      docsReceived: 'received', docsRequested: 'requested'
+      docsReceived: 'Received', docsRequested: 'Requested', docsNone: 'Not requested',
+      themeDark: 'Switch to dark mode', themeLight: 'Switch to light mode'
     }
   };
-  var KPI_COLORS = { expired: 'var(--red)', 'at-risk': 'var(--pink)', expiring: 'var(--amber)', active: 'var(--green)' };
+  var KPI_COLORS = { expired: 'var(--bad)', 'at-risk': 'var(--risk)', expiring: 'var(--warn)', active: 'var(--ok)' };
+  var DOCS_URL = {
+    es: 'https://github.com/Dsergio909/supplier-radar/blob/main/docs/como-funciona.md',
+    en: 'https://github.com/Dsergio909/supplier-radar/blob/main/docs/how-it-works.md'
+  };
   var DAY_MS = 86400000;
   var FLASH_MS = 1800;
+  var STEP_MS = 260;
 
   var lang = /^en/i.test(navigator.language || '') ? 'en' : 'es';
   var state;
 
   function t(key) { return I18N[lang][key]; }
+  function fill(template, values) {
+    return template.replace(/\{(\w+)\}/g, function (_, k) { return values[k]; });
+  }
   function $(id) { return document.getElementById(id); }
   function el(tag, cls, text) {
     var node = document.createElement(tag);
@@ -71,6 +101,24 @@
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
 
+  // ---------- theme (remembered per browser when storage is available) ----------
+
+  function storedTheme() {
+    try { return localStorage.getItem('sr-theme'); } catch (e) { return null; }
+  }
+  function isDark() {
+    var forced = document.documentElement.getAttribute('data-theme');
+    if (forced) return forced === 'dark';
+    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem('sr-theme', theme); } catch (e) { /* storage blocked: theme lasts this visit */ }
+    render();
+  }
+
+  // ---------- state ----------
+
   function reset() {
     state = {
       suppliers: JSON.parse(JSON.stringify(SampleData.suppliers)),
@@ -78,7 +126,8 @@
       resolved: {},
       flashUntil: {},
       scanning: null,
-      processing: false
+      processing: false,
+      processedCount: 0
     };
     render();
   }
@@ -97,6 +146,17 @@
     state.flashUntil[supplierId] = Date.now() + FLASH_MS;
   }
 
+  function pendingReview() {
+    return SampleData.inbox.filter(function (m) {
+      var r = state.results[m.id];
+      return r && r.decision === 'review' && !state.resolved[m.id];
+    });
+  }
+
+  function allProcessed() {
+    return SampleData.inbox.every(function (m) { return state.results[m.id]; });
+  }
+
   // ---------- actions ----------
 
   function processInbox() {
@@ -104,7 +164,7 @@
     var run = state;
     run.processing = true;
     var queue = SampleData.inbox.filter(function (m) { return !run.results[m.id]; });
-    var delay = reducedMotion() ? 0 : 420;
+    var delay = reducedMotion() ? 0 : STEP_MS;
 
     (function step() {
       if (state !== run) return; // reset while processing
@@ -120,9 +180,10 @@
         if (state !== run) return;
         var result = Classifier.classifyEmail(mail, run.suppliers);
         run.results[mail.id] = result;
+        run.processedCount++;
         if (result.decision === 'confirmed' && result.documentAttached) recordDocuments(result.supplierId);
         render();
-        setTimeout(step, delay / 2);
+        setTimeout(step, delay / 3);
       }, delay);
     })();
   }
@@ -143,14 +204,28 @@
     document.querySelectorAll('[data-lang]').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang));
     });
+    $('howLink').href = DOCS_URL[lang];
+    $('theme').setAttribute('aria-label', isDark() ? t('themeLight') : t('themeDark'));
+    $('theme').title = $('theme').getAttribute('aria-label');
     $('today').textContent = today();
-    $('process').disabled = state.processing || SampleData.inbox.every(function (m) { return state.results[m.id]; });
+    $('process').disabled = state.processing || allProcessed();
 
     var summary = Compliance.summarize(state.suppliers, today());
+    renderSteps();
     renderKpis(summary);
     renderInbox();
     renderReview();
     renderSuppliers(summary);
+  }
+
+  function renderSteps() {
+    var processed = allProcessed() && !state.processing;
+    var reviewed = processed && pendingReview().length === 0;
+    var current = !processed ? 1 : (!reviewed ? 2 : 3);
+    document.querySelectorAll('#steps li').forEach(function (li) {
+      var n = Number(li.getAttribute('data-step'));
+      li.className = n < current ? 'done' : (n === current ? 'current' : '');
+    });
   }
 
   function renderKpis(summary) {
@@ -159,8 +234,8 @@
     Compliance.STATUSES.forEach(function (status) {
       var card = el('div', 'kpi');
       card.style.setProperty('--c', KPI_COLORS[status]);
-      card.appendChild(el('span', 'n', String(summary.counts[status])));
       card.appendChild(el('span', 'l', t('kpi')[status]));
+      card.appendChild(el('span', 'n', String(summary.counts[status])));
       box.appendChild(card);
     });
   }
@@ -168,23 +243,40 @@
   function mailHeader(item, mail) {
     item.appendChild(el('span', 'from', mail.from));
     item.appendChild(el('span', 'subject', mail.subject));
+    if (mail.attachments.length) {
+      var clip = el('span', 'clip');
+      mail.attachments.forEach(function (name) { clip.appendChild(el('span', 'file', name)); });
+      item.appendChild(clip);
+    }
+  }
+
+  function isSpoof(result) {
+    return !!(result && result.reason && result.reason.code === 'unverified-sender');
   }
 
   function renderInbox() {
+    var n = SampleData.inbox.length;
+    var counts = { confirmed: 0, review: 0, unmatched: 0 };
+    Object.keys(state.results).forEach(function (id) { counts[state.results[id].decision]++; });
+    $('inboxSub').textContent = state.processing
+      ? fill(t('inboxBusy'), { i: Math.min(state.processedCount + 1, n), n: n })
+      : (state.processedCount ? fill(t('inboxDone'), { c: counts.confirmed, r: counts.review, u: counts.unmatched }) : fill(t('inboxIdle'), { n: n }));
+    $('progress').hidden = state.processedCount === 0 && !state.processing;
+    $('progressBar').style.width = (100 * state.processedCount / n) + '%';
+
     var list = $('inbox');
     list.textContent = '';
     SampleData.inbox.forEach(function (mail) {
-      var item = el('li', 'mail' + (state.scanning === mail.id ? ' scanning' : ''));
-      mailHeader(item, mail);
-      if (mail.attachments.length) item.appendChild(el('span', 'clip', '📎 ' + mail.attachments.join(', ')));
-
       var result = state.results[mail.id];
+      var item = el('li', 'mail' + (state.scanning === mail.id ? ' scanning' : '') + (isSpoof(result) ? ' alert' : ''));
+      mailHeader(item, mail);
       if (result) {
         var row = el('div', 'result');
-        row.appendChild(el('span', 'chip ' + result.decision, t('decision')[result.decision]));
-        if (result.tier) row.appendChild(el('span', 'chip ' + result.tier, result.tier.toUpperCase()));
+        row.appendChild(el('span', 'pill ' + result.decision, t('decision')[result.decision]));
+        if (isSpoof(result)) row.appendChild(el('span', 'pill alert', '⚠ ' + t('spoof')));
+        if (result.tier) row.appendChild(el('span', 'tag ' + result.tier, result.tier.toUpperCase()));
         var who = result.supplierId ? supplierById(result.supplierId).name + ' · ' : '';
-        row.appendChild(el('span', '', who + Messages.explain(result, lang)));
+        row.appendChild(el('span', 'why', who + Messages.explain(result, lang)));
         item.appendChild(row);
       }
       list.appendChild(item);
@@ -194,32 +286,38 @@
   function renderReview() {
     var list = $('review');
     list.textContent = '';
-    var pending = SampleData.inbox.filter(function (m) {
-      var r = state.results[m.id];
-      return r && r.decision === 'review' && !state.resolved[m.id];
-    });
-    $('reviewCount').textContent = pending.length ? '(' + pending.length + ')' : '';
+    var pending = pendingReview();
+    $('reviewCount').hidden = !pending.length;
+    $('reviewCount').textContent = String(pending.length);
     if (!pending.length) {
-      list.appendChild(el('li', 'empty', t('reviewEmpty')));
+      var done = allProcessed() && !state.processing;
+      var empty = el('li', 'empty');
+      empty.appendChild(el('span', 'icon', done ? '✓' : '⌛'));
+      empty.appendChild(el('strong', '', t('reviewEmptyTitle')));
+      empty.appendChild(el('span', '', done ? t('reviewDone') : t('reviewEmpty')));
+      list.appendChild(empty);
       return;
     }
     pending.forEach(function (mail) {
       var result = state.results[mail.id];
-      var item = el('li', 'mail');
+      var item = el('li', 'mail' + (isSpoof(result) ? ' alert' : ''));
       mailHeader(item, mail);
       var why = el('div', 'result');
-      why.appendChild(el('span', 'chip ' + result.tier, result.tier.toUpperCase()));
-      why.appendChild(el('span', '', Messages.explain(result, lang)));
+      if (isSpoof(result)) why.appendChild(el('span', 'pill alert', '⚠ ' + t('spoof')));
+      if (result.tier) why.appendChild(el('span', 'tag ' + result.tier, result.tier.toUpperCase()));
+      why.appendChild(el('span', 'why', Messages.explain(result, lang)));
       item.appendChild(why);
 
       var buttons = el('div', 'buttons');
       result.candidates.forEach(function (c) {
         var b = el('button', 'btn small primary', t('assign') + ' ' + supplierById(c.supplierId).name);
+        b.type = 'button';
         b.title = c.evidence.map(function (e) { return Messages.format(e, lang); }).join(', ');
         b.addEventListener('click', function () { resolve(mail, c.supplierId); });
         buttons.appendChild(b);
       });
       var discard = el('button', 'btn small', t('discard'));
+      discard.type = 'button';
       discard.addEventListener('click', function () { resolve(mail, null); });
       buttons.appendChild(discard);
       item.appendChild(buttons);
@@ -227,22 +325,29 @@
     });
   }
 
-  function docsText(s) {
+  function docsCell(s) {
     var requested = Compliance.toDay(s.docsRequestedAt);
     var received = Compliance.toDay(s.docsReceivedAt);
+    var td = el('td', 'nowrap');
     if (received !== null && (requested === null || received >= requested)) {
-      return '✔ ' + t('docsReceived') + ' ' + s.docsReceivedAt;
+      td.appendChild(el('span', '', '✓ ' + t('docsReceived') + ' '));
+      td.appendChild(el('span', 'muted', s.docsReceivedAt));
+    } else if (requested !== null) {
+      td.appendChild(el('span', '', t('docsRequested') + ' '));
+      td.appendChild(el('span', 'muted', s.docsRequestedAt));
+    } else {
+      td.appendChild(el('span', 'muted', t('docsNone')));
     }
-    return requested !== null ? '⏳ ' + t('docsRequested') + ' ' + s.docsRequestedAt : '—';
+    return td;
   }
 
   function flash(tr, supplierId) {
     var remaining = (state.flashUntil[supplierId] || 0) - Date.now();
     if (remaining <= 0 || reducedMotion() || !tr.animate) return;
     // Rows are rebuilt on every render, so resume the fade where it was.
-    var alpha = (0.25 * remaining / FLASH_MS).toFixed(3);
+    var alpha = (0.22 * remaining / FLASH_MS).toFixed(3);
     tr.animate(
-      [{ backgroundColor: 'rgba(57, 255, 136, ' + alpha + ')' }, { backgroundColor: 'rgba(57, 255, 136, 0)' }],
+      [{ backgroundColor: 'rgba(34, 197, 94, ' + alpha + ')' }, { backgroundColor: 'rgba(34, 197, 94, 0)' }],
       { duration: remaining, easing: 'linear' }
     );
   }
@@ -253,18 +358,20 @@
     summary.rows.forEach(function (row) {
       var s = row.supplier;
       var tr = el('tr');
-      tr.appendChild(el('td', '', s.name));
-      tr.appendChild(el('td', 'nowrap', s.contractId));
+      var nameCell = el('td');
+      nameCell.appendChild(el('span', 'name', s.name));
+      nameCell.appendChild(el('span', 'contract', s.contractId));
+      tr.appendChild(nameCell);
       var statusCell = el('td');
       statusCell.appendChild(el('span', 'status ' + row.status, t('status')[row.status]));
       tr.appendChild(statusCell);
       tr.appendChild(el('td', 'num', row.daysLeft === null ? '—' : String(row.daysLeft)));
-      tr.appendChild(el('td', 'nowrap', docsText(s)));
-      tr.appendChild(el('td', '', Messages.format(row.reason, lang)));
-      var manual = el('td', row.staleManualStatus ? 'stale' : '');
+      tr.appendChild(docsCell(s));
+      tr.appendChild(el('td', 'muted', Messages.format(row.reason, lang)));
+      var manual = el('td', row.staleManualStatus ? 'stale nowrap' : 'nowrap');
       if (row.staleManualStatus) {
         manual.appendChild(el('s', '', t('status')[s.manualStatus]));
-        manual.appendChild(document.createTextNode(' ⚠ ' + t('stale')));
+        manual.appendChild(el('span', 'warnmark', '⚠ ' + t('stale')));
       } else {
         manual.textContent = t('status')[s.manualStatus] || '—';
       }
@@ -276,12 +383,20 @@
 
   // ---------- wiring ----------
 
+  var saved = storedTheme();
+  if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+
   $('process').addEventListener('click', processInbox);
   $('reset').addEventListener('click', function () { $('dayOffset').value = 0; reset(); });
   $('dayOffset').addEventListener('input', render);
+  $('theme').addEventListener('click', function () { setTheme(isDark() ? 'light' : 'dark'); });
   document.querySelectorAll('[data-lang]').forEach(function (b) {
     b.addEventListener('click', function () { lang = b.getAttribute('data-lang'); render(); });
   });
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', function () { if (state) render(); });
+  }
 
   reset();
 })();

@@ -2,8 +2,9 @@
  * Supplier Radar — Google Apps Script adapter.
  *
  * Wires the pure logic in src/core (Classifier, Compliance, Messages) to
- * Sheets, Gmail and Drive. Run `npm run build:gas` to copy the core files
- * next to this one, then paste or `clasp push` the folder (see README).
+ * Sheets, Gmail and Drive. The core files (core_*.js) live next to this one;
+ * paste every .js file of this folder into Apps Script, or `clasp push` it
+ * (see docs/como-funciona.md). `npm run build:gas` regenerates them.
  *
  * Spreadsheet tabs:
  *   Proveedores — you create it, with headers:
