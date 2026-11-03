@@ -4,33 +4,32 @@
 
   var I18N = {
     es: {
-      tagline: 'Control de proveedores y contratos',
+      tagline: 'Compras · Cumplimiento de proveedores',
       howLink: 'Cómo funciona',
-      sampleData: 'Demo con datos de ejemplo',
-      heroTitle: 'Sabe qué proveedor respondió y quién está al día, sin revisar el correo a mano.',
-      intro: 'Supplier Radar lee la bandeja de entrada, reconoce qué proveedor envió cada correo con niveles de confianza, confirma solo lo seguro y te pasa lo dudoso para que decidas. El estado de cada proveedor se calcula con las fechas del contrato y de los documentos.',
-      step1: 'Procesa la bandeja', step1Hint: 'El sistema clasifica los 10 correos de ejemplo.',
-      step2: 'Resuelve los casos dudosos', step2Hint: 'Revisa la evidencia y asigna o descarta.',
-      step3: 'Revisa el estado de tus proveedores', step3Hint: 'Adelanta la fecha y mira cómo cambian.',
+      sampleData: 'Demo · datos ficticios',
+      intro: 'Clasifica las respuestas de los proveedores por nivel de confianza. Lo seguro se confirma solo; lo dudoso lo decide una persona. El estado sale de las fechas.',
+      step1: 'Procesar bandeja', step2: 'Resolver casos dudosos', step3: 'Monitorear proveedores',
       inbox: 'Bandeja de entrada', process: 'Procesar bandeja', reset: 'Reiniciar',
       inboxIdle: '{n} correos sin procesar', inboxBusy: 'Procesando {i} de {n}…', inboxDone: 'Confirmados: {c} · A revisión: {r} · Ignorados: {u}',
-      review: 'Revisión humana',
-      reviewHint: 'El sistema no adivina: te muestra la evidencia y tú decides.',
-      reviewEmptyTitle: 'Nada pendiente',
-      reviewEmpty: 'Procesa la bandeja: aquí aparecen los correos que no se pueden asignar con seguridad.',
+      review: 'Cola de revisión',
+      reviewHint: 'El sistema no adivina: muestra la evidencia y una persona decide.',
+      reviewEmptyTitle: 'Sin pendientes',
+      reviewEmpty: 'Procesa la bandeja. Aquí llegan los correos que no se pueden asignar con seguridad.',
       reviewDone: 'Todos los casos dudosos están resueltos.',
       suppliers: 'Proveedores',
-      suppliersHint: 'Ordenados por urgencia. El estado sale de las fechas, no de lo que alguien escribió en la hoja.',
+      suppliersHint: 'Ordenados por urgencia. El estado se calcula con fechas, no con lo escrito en la hoja.',
       simDate: 'Fecha simulada:', clockHint: 'Mueve la barra para adelantar el tiempo.',
-      colSupplier: 'Proveedor', colStatus: 'Estado', colDays: 'Días de contrato', colDocs: 'Documentos',
-      colReason: 'Motivo', colManual: 'Estado escrito en la hoja',
-      howTitle: 'Niveles de confianza', howSub: 'Cómo decide el sistema si un correo es de un proveedor.',
-      tierExact: 'Remitente registrado y número de contrato en el correo: se confirma.',
-      tierHigh: 'Remitente registrado: se confirma.',
-      tierMedium: 'Dominio corporativo del proveedor (nunca Gmail u Hotmail): se confirma si es único; si dos proveedores lo comparten, va a revisión.',
-      tierLow: 'Solo un nombre parecido o un número de contrato desde un correo desconocido: siempre va a revisión.',
+      colSupplier: 'Proveedor', colStatus: 'Estado', colDays: 'Días contrato', colDocs: 'Documentos',
+      colReason: 'Motivo', colManual: 'Estado en la hoja',
+      howTitle: 'Reglas de confianza', howSub: 'Cómo decide el sistema si un correo es de un proveedor.',
+      colTier: 'Nivel', colCondition: 'Condición', colAction: 'Acción',
+      tierExact: 'Remitente registrado y número de contrato en el correo.',
+      tierHigh: 'Remitente registrado.',
+      tierMedium: 'Dominio corporativo del proveedor (nunca Gmail u Hotmail).',
+      tierLow: 'Solo un nombre parecido, o un número de contrato desde un correo desconocido.',
+      actConfirm: 'Confirma', actUnique: 'Confirma si es único', actReview: 'Revisión humana',
       footer: 'Datos ficticios · la lógica de src/core está cubierta por pruebas automáticas',
-      kpi: { expired: 'Vencidos', 'at-risk': 'En riesgo', expiring: 'Por vencer (30 días)', active: 'Al día' },
+      kpi: { expired: 'Vencidos', 'at-risk': 'En riesgo', expiring: 'Por vencer · 30 días', active: 'Al día' },
       status: { expired: 'Vencido', 'at-risk': 'En riesgo', expiring: 'Por vencer', active: 'Al día' },
       decision: { confirmed: 'Confirmado', review: 'A revisión', unmatched: 'Ignorado' },
       spoof: 'Posible suplantación',
@@ -39,33 +38,32 @@
       themeDark: 'Cambiar a modo oscuro', themeLight: 'Cambiar a modo claro'
     },
     en: {
-      tagline: 'Supplier and contract control',
+      tagline: 'Procurement · Supplier compliance',
       howLink: 'How it works',
-      sampleData: 'Demo with sample data',
-      heroTitle: 'Know which supplier replied and who is up to date, without combing through email.',
-      intro: 'Supplier Radar reads the inbox, works out which supplier sent each email using confidence tiers, confirms only the safe matches and hands you anything doubtful to decide. Each supplier’s status is computed from contract and document dates.',
-      step1: 'Process the inbox', step1Hint: 'The system classifies the 10 sample emails.',
-      step2: 'Resolve the doubtful cases', step2Hint: 'Check the evidence, then assign or discard.',
-      step3: 'Check your suppliers', step3Hint: 'Move the date forward and watch them change.',
+      sampleData: 'Demo · fictional data',
+      intro: 'Classifies supplier replies by confidence. Safe matches are confirmed automatically; doubtful ones go to a person. Status comes from dates.',
+      step1: 'Process inbox', step2: 'Resolve doubtful cases', step3: 'Monitor suppliers',
       inbox: 'Inbox', process: 'Process inbox', reset: 'Reset',
       inboxIdle: '{n} unprocessed emails', inboxBusy: 'Processing {i} of {n}…', inboxDone: 'Confirmed: {c} · To review: {r} · Ignored: {u}',
-      review: 'Human review',
-      reviewHint: 'The system does not guess: it shows the evidence and you decide.',
+      review: 'Review queue',
+      reviewHint: 'The system does not guess: it shows the evidence and a person decides.',
       reviewEmptyTitle: 'Nothing pending',
-      reviewEmpty: 'Process the inbox: emails that cannot be matched safely show up here.',
+      reviewEmpty: 'Process the inbox. Emails that cannot be matched safely land here.',
       reviewDone: 'Every doubtful case is resolved.',
       suppliers: 'Suppliers',
-      suppliersHint: 'Sorted by urgency. Status comes from dates, not from what someone typed in the sheet.',
+      suppliersHint: 'Sorted by urgency. Status is computed from dates, not from what the sheet says.',
       simDate: 'Simulated date:', clockHint: 'Drag to move time forward.',
       colSupplier: 'Supplier', colStatus: 'Status', colDays: 'Contract days', colDocs: 'Documents',
-      colReason: 'Reason', colManual: 'Status typed in the sheet',
-      howTitle: 'Confidence tiers', howSub: 'How the system decides whether an email comes from a supplier.',
-      tierExact: 'Registered sender and contract number in the email: confirmed.',
-      tierHigh: 'Registered sender: confirmed.',
-      tierMedium: 'Supplier corporate domain (never Gmail or Hotmail): confirmed if unique; if two suppliers share it, it goes to review.',
-      tierLow: 'Only a similar name, or a contract number from an unknown address: always goes to review.',
+      colReason: 'Reason', colManual: 'Status in sheet',
+      howTitle: 'Confidence rules', howSub: 'How the system decides whether an email comes from a supplier.',
+      colTier: 'Tier', colCondition: 'Condition', colAction: 'Action',
+      tierExact: 'Registered sender and contract number in the email.',
+      tierHigh: 'Registered sender.',
+      tierMedium: 'Supplier corporate domain (never Gmail or Hotmail).',
+      tierLow: 'Only a similar name, or a contract number from an unknown address.',
+      actConfirm: 'Confirm', actUnique: 'Confirm if unique', actReview: 'Human review',
       footer: 'Fictional data · the logic in src/core is covered by automated tests',
-      kpi: { expired: 'Expired', 'at-risk': 'At risk', expiring: 'Expiring (30 days)', active: 'Up to date' },
+      kpi: { expired: 'Expired', 'at-risk': 'At risk', expiring: 'Expiring · 30 days', active: 'Up to date' },
       status: { expired: 'Expired', 'at-risk': 'At risk', expiring: 'Expiring', active: 'Up to date' },
       decision: { confirmed: 'Confirmed', review: 'To review', unmatched: 'Ignored' },
       spoof: 'Possible spoofing',
@@ -240,18 +238,42 @@
     });
   }
 
-  function mailHeader(item, mail) {
-    item.appendChild(el('span', 'from', mail.from));
-    item.appendChild(el('span', 'subject', mail.subject));
-    if (mail.attachments.length) {
-      var clip = el('span', 'clip');
-      mail.attachments.forEach(function (name) { clip.appendChild(el('span', 'file', name)); });
-      item.appendChild(clip);
-    }
-  }
-
   function isSpoof(result) {
     return !!(result && result.reason && result.reason.code === 'unverified-sender');
+  }
+
+  function mailRow(mail, result, extraClass) {
+    var cls = 'row' + (extraClass ? ' ' + extraClass : '');
+    if (result) cls += isSpoof(result) ? ' alert' : ' d-' + result.decision;
+    var item = el('li', cls);
+    var who = el('div', 'who');
+    who.appendChild(el('span', 'from', mail.from));
+    who.appendChild(el('span', 'subject', mail.subject));
+    if (mail.attachments.length) {
+      var files = el('span', 'files');
+      mail.attachments.forEach(function (name) { files.appendChild(el('span', 'file', name)); });
+      who.appendChild(files);
+    }
+    item.appendChild(who);
+    return item;
+  }
+
+  function outcome(result, withDecision) {
+    var box = el('div', 'outcome');
+    if (isSpoof(result)) box.appendChild(el('span', 'dec alert', t('spoof')));
+    else if (withDecision) box.appendChild(el('span', 'dec ' + result.decision, t('decision')[result.decision]));
+    if (result.tier) box.appendChild(el('span', 'code ' + result.tier, result.tier.toUpperCase()));
+    return box;
+  }
+
+  function whyLine(result) {
+    var line = el('div', 'why');
+    if (result.supplierId) {
+      line.appendChild(el('b', '', supplierById(result.supplierId).name));
+      line.appendChild(document.createTextNode(' · '));
+    }
+    line.appendChild(document.createTextNode(Messages.explain(result, lang)));
+    return line;
   }
 
   function renderInbox() {
@@ -268,16 +290,10 @@
     list.textContent = '';
     SampleData.inbox.forEach(function (mail) {
       var result = state.results[mail.id];
-      var item = el('li', 'mail' + (state.scanning === mail.id ? ' scanning' : '') + (isSpoof(result) ? ' alert' : ''));
-      mailHeader(item, mail);
+      var item = mailRow(mail, result, state.scanning === mail.id ? 'scanning' : '');
       if (result) {
-        var row = el('div', 'result');
-        row.appendChild(el('span', 'pill ' + result.decision, t('decision')[result.decision]));
-        if (isSpoof(result)) row.appendChild(el('span', 'pill alert', '⚠ ' + t('spoof')));
-        if (result.tier) row.appendChild(el('span', 'tag ' + result.tier, result.tier.toUpperCase()));
-        var who = result.supplierId ? supplierById(result.supplierId).name + ' · ' : '';
-        row.appendChild(el('span', 'why', who + Messages.explain(result, lang)));
-        item.appendChild(row);
+        item.appendChild(outcome(result, true));
+        item.appendChild(whyLine(result));
       }
       list.appendChild(item);
     });
@@ -292,7 +308,6 @@
     if (!pending.length) {
       var done = allProcessed() && !state.processing;
       var empty = el('li', 'empty');
-      empty.appendChild(el('span', 'icon', done ? '✓' : '⌛'));
       empty.appendChild(el('strong', '', t('reviewEmptyTitle')));
       empty.appendChild(el('span', '', done ? t('reviewDone') : t('reviewEmpty')));
       list.appendChild(empty);
@@ -300,14 +315,9 @@
     }
     pending.forEach(function (mail) {
       var result = state.results[mail.id];
-      var item = el('li', 'mail' + (isSpoof(result) ? ' alert' : ''));
-      mailHeader(item, mail);
-      var why = el('div', 'result');
-      if (isSpoof(result)) why.appendChild(el('span', 'pill alert', '⚠ ' + t('spoof')));
-      if (result.tier) why.appendChild(el('span', 'tag ' + result.tier, result.tier.toUpperCase()));
-      why.appendChild(el('span', 'why', Messages.explain(result, lang)));
-      item.appendChild(why);
-
+      var item = mailRow(mail, result, '');
+      item.appendChild(outcome(result, false));
+      item.appendChild(whyLine(result));
       var buttons = el('div', 'buttons');
       result.candidates.forEach(function (c) {
         var b = el('button', 'btn small primary', t('assign') + ' ' + supplierById(c.supplierId).name);
@@ -331,10 +341,10 @@
     var td = el('td', 'nowrap');
     if (received !== null && (requested === null || received >= requested)) {
       td.appendChild(el('span', '', '✓ ' + t('docsReceived') + ' '));
-      td.appendChild(el('span', 'muted', s.docsReceivedAt));
+      td.appendChild(el('span', 'mono muted', s.docsReceivedAt));
     } else if (requested !== null) {
       td.appendChild(el('span', '', t('docsRequested') + ' '));
-      td.appendChild(el('span', 'muted', s.docsRequestedAt));
+      td.appendChild(el('span', 'mono muted', s.docsRequestedAt));
     } else {
       td.appendChild(el('span', 'muted', t('docsNone')));
     }
@@ -347,7 +357,7 @@
     // Rows are rebuilt on every render, so resume the fade where it was.
     var alpha = (0.22 * remaining / FLASH_MS).toFixed(3);
     tr.animate(
-      [{ backgroundColor: 'rgba(34, 197, 94, ' + alpha + ')' }, { backgroundColor: 'rgba(34, 197, 94, 0)' }],
+      [{ backgroundColor: 'rgba(11, 107, 102, ' + alpha + ')' }, { backgroundColor: 'rgba(11, 107, 102, 0)' }],
       { duration: remaining, easing: 'linear' }
     );
   }
@@ -359,8 +369,8 @@
       var s = row.supplier;
       var tr = el('tr');
       var nameCell = el('td');
-      nameCell.appendChild(el('span', 'name', s.name));
-      nameCell.appendChild(el('span', 'contract', s.contractId));
+      nameCell.appendChild(el('span', 'sname', s.name));
+      nameCell.appendChild(el('span', 'scontract', s.contractId));
       tr.appendChild(nameCell);
       var statusCell = el('td');
       statusCell.appendChild(el('span', 'status ' + row.status, t('status')[row.status]));

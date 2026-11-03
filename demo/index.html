@@ -20,22 +20,15 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="wrap topbar-inner">
+<header class="appbar">
+  <div class="shell appbar-inner">
     <a class="brand" href="./" aria-label="Supplier Radar">
-      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
-        <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2" opacity=".35"/>
-        <circle cx="16" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="2" opacity=".6"/>
-        <path d="M16 16 L26 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="16" cy="16" r="2.6" fill="currentColor"/>
-        <circle cx="22" cy="21" r="2" fill="var(--warn)"/>
-      </svg>
-      <span>
-        <strong>Supplier Radar</strong>
-        <small data-i18n="tagline"></small>
-      </span>
+      <span class="mark" aria-hidden="true">SR</span>
+      <span class="name">Supplier Radar</span>
+      <span class="module" data-i18n="tagline"></span>
     </a>
     <nav class="tools">
+      <span class="env" data-i18n="sampleData"></span>
       <a class="link" id="howLink" href="https://github.com/Dsergio909/supplier-radar/blob/main/docs/como-funciona.md" data-i18n="howLink"></a>
       <div class="segmented" role="group" aria-label="Idioma / Language">
         <button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button>
@@ -47,63 +40,61 @@
   </div>
 </header>
 
-<main class="wrap">
-  <section class="hero">
-    <div>
-      <p class="eyebrow"><span class="badge neutral" data-i18n="sampleData"></span></p>
-      <h1 data-i18n="heroTitle"></h1>
-      <p class="lead" data-i18n="intro"></p>
-    </div>
-    <ol class="steps" id="steps">
-      <li data-step="1"><span class="num">1</span><span><strong data-i18n="step1"></strong><small data-i18n="step1Hint"></small></span></li>
-      <li data-step="2"><span class="num">2</span><span><strong data-i18n="step2"></strong><small data-i18n="step2Hint"></small></span></li>
-      <li data-step="3"><span class="num">3</span><span><strong data-i18n="step3"></strong><small data-i18n="step3Hint"></small></span></li>
+<div class="toolbar">
+  <div class="shell toolbar-inner">
+    <ol class="stepper" id="steps">
+      <li data-step="1"><span class="num">1</span><span data-i18n="step1"></span></li>
+      <li data-step="2"><span class="num">2</span><span data-i18n="step2"></span></li>
+      <li data-step="3"><span class="num">3</span><span data-i18n="step3"></span></li>
     </ol>
-  </section>
+    <p class="context" data-i18n="intro"></p>
+  </div>
+</div>
 
+<main class="shell">
   <section class="kpis" id="kpis" aria-live="polite"></section>
 
-  <div class="grid">
-    <section class="card">
-      <header class="card-head">
+  <div class="work">
+    <section class="pane">
+      <header class="pane-head">
         <div>
           <h2 data-i18n="inbox"></h2>
-          <p class="sub" id="inboxSub"></p>
+          <p class="meta" id="inboxSub"></p>
         </div>
         <div class="actions">
-          <button type="button" id="reset" class="btn ghost" data-i18n="reset"></button>
+          <button type="button" id="reset" class="btn" data-i18n="reset"></button>
           <button type="button" id="process" class="btn primary" data-i18n="process"></button>
         </div>
       </header>
       <div class="progress" id="progress" hidden><span id="progressBar"></span></div>
-      <ol id="inbox" class="mails"></ol>
+      <ol id="inbox" class="rows"></ol>
     </section>
 
-    <section class="card review-card">
-      <header class="card-head">
+    <section class="pane review-pane">
+      <header class="pane-head">
         <div>
           <h2><span data-i18n="review"></span> <span id="reviewCount" class="count" hidden></span></h2>
-          <p class="sub" data-i18n="reviewHint"></p>
+          <p class="meta" data-i18n="reviewHint"></p>
         </div>
       </header>
-      <ol id="review" class="mails"></ol>
+      <ol id="review" class="rows"></ol>
     </section>
   </div>
 
-  <section class="card">
-    <header class="card-head wrap-head">
+  <section class="pane">
+    <header class="pane-head split">
       <div>
         <h2 data-i18n="suppliers"></h2>
-        <p class="sub" data-i18n="suppliersHint"></p>
+        <p class="meta" data-i18n="suppliersHint"></p>
       </div>
       <label class="clock">
-        <span><span data-i18n="simDate"></span> <strong id="today"></strong></span>
+        <span class="clock-label"><span data-i18n="simDate"></span> <strong id="today"></strong></span>
         <input id="dayOffset" type="range" min="0" max="120" value="0" aria-describedby="clockHint">
         <small id="clockHint" data-i18n="clockHint"></small>
       </label>
     </header>
     <div class="table-wrap">
-      <table>
+      <table class="grid-table">
         <thead><tr>
           <th data-i18n="colSupplier"></th><th data-i18n="colStatus"></th>
           <th class="num" data-i18n="colDays"></th><th data-i18n="colDocs"></th><th data-i18n="colReason"></th>
@@ -114,18 +105,23 @@
     </div>
   </section>
 
-  <section class="card">
-    <header class="card-head"><div><h2 data-i18n="howTitle"></h2><p class="sub" data-i18n="howSub"></p></div></header>
-    <ul class="tiers">
-      <li><span class="tag exact">EXACT</span><p data-i18n="tierExact"></p></li>
-      <li><span class="tag high">HIGH</span><p data-i18n="tierHigh"></p></li>
-      <li><span class="tag medium">MEDIUM</span><p data-i18n="tierMedium"></p></li>
-      <li><span class="tag low">LOW</span><p data-i18n="tierLow"></p></li>
-    </ul>
+  <section class="pane">
+    <header class="pane-head"><div><h2 data-i18n="howTitle"></h2><p class="meta" data-i18n="howSub"></p></div></header>
+    <div class="table-wrap">
+      <table class="grid-table rules">
+        <thead><tr><th data-i18n="colTier"></th><th data-i18n="colCondition"></th><th data-i18n="colAction"></th></tr></thead>
+        <tbody>
+          <tr><td><span class="code exact">EXACT</span></td><td data-i18n="tierExact"></td><td data-i18n="actConfirm"></td></tr>
+          <tr><td><span class="code high">HIGH</span></td><td data-i18n="tierHigh"></td><td data-i18n="actConfirm"></td></tr>
+          <tr><td><span class="code medium">MEDIUM</span></td><td data-i18n="tierMedium"></td><td data-i18n="actUnique"></td></tr>
+          <tr><td><span class="code low">LOW</span></td><td data-i18n="tierLow"></td><td data-i18n="actReview"></td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </main>
 
-<footer class="wrap footer">
+<footer class="shell footer">
   <span data-i18n="footer"></span>
   <span><a href="https://github.com/Dsergio909/supplier-radar">GitHub</a> · <a href="https://dsergio909.github.io/">Sergio García</a></span>
 </footer>
