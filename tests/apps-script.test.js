@@ -65,9 +65,14 @@ test('scanInbox logs each message once, files confirmed documents and queues the
   assert.match(review[3][4], /NO verificado/, 'spoofed sender goes to review, not confirmed');
   assert.equal(review[0][4], '2 proveedores empatan con confianza media');
 
-  for (const id of ['S01', 'S02', 'S03', 'S04', 'S06', 'S09']) {
+  for (const id of ['S01', 'S02', 'S04', 'S06']) {
     assert.ok(isDate(env.cell(id, 'docsReceivedAt')), `${id} should have documents recorded`);
     assert.ok(env.folder(id).files.length > 0, `${id} should have a Drive folder with files`);
+  }
+  // A renewal proposal and a price list are filed, but they are not the requested documents.
+  for (const id of ['S03', 'S09']) {
+    assert.equal(env.cell(id, 'docsReceivedAt'), '', `${id}: unrecognised files do not count as documents`);
+    assert.ok(env.folder(id).files.length > 0, `${id} attachments are still filed in Drive`);
   }
   assert.equal(env.cell('S05', 'docsReceivedAt'), '', 'review cases are not recorded automatically');
 

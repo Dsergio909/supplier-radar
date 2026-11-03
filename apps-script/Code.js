@@ -97,8 +97,11 @@ function scanInbox_() {
       log.appendRow([message.getDate(), safeCell_(message.getFrom()), safeCell_(message.getSubject()), result.decision,
         result.tier || '', result.supplierId || '', explanation, link, asText_(id)]);
 
-      if (result.decision === 'confirmed' && result.documentAttached) {
+      if (result.decision === 'confirmed' && result.documents.length) {
         recordDocuments_(table, result.supplierId, message);
+      } else if (result.decision === 'confirmed' && result.documentAttached) {
+        // Filed, but files like a price list do not count as the requested documents.
+        saveAttachments_(table.byId[result.supplierId].supplier, message.getAttachments());
       } else if (result.decision === 'review') {
         var candidates = result.candidates.map(function (c) { return c.supplierId + ' (' + c.tier + ')'; });
         review.appendRow([message.getDate(), safeCell_(message.getFrom()), safeCell_(message.getSubject()), result.tier, explanation,
