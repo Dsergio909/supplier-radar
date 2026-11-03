@@ -143,3 +143,15 @@ test('hostile or empty input does not break the classifier', () => {
   assert.equal(classifyEmail(mail('x@evil.example', '<img src=x onerror=alert(1)>', { body: '<script>alert(1)</script>' }), suppliers).decision, 'unmatched');
   assert.equal(classifyEmail({}, suppliers).decision, 'unmatched');
 });
+
+test('more real cases: long threads, English, document names and lookalikes with a hyphen', () => {
+  const r1 = classifyEmail(mail('compras@papeleriaandina.example', 'RE: RE: RV: Documentos CT-2026-014', { attachments: ['RUT 2026 (1).pdf'] }), suppliers);
+  assert.equal(r1.tier, 'exact');
+  assert.deepEqual(r1.documents, ['rut']);
+  const r2 = classifyEmail(mail('ops@logcaribe.example', 'Documents for contract CT-2026-021', { attachments: ['chamber_of_commerce.pdf', 'Bank certificate.pdf'] }), suppliers);
+  assert.deepEqual(r2.documents, ['chamber', 'bank-letter']);
+  assert.equal(classifyEmail(mail('pagos@papeleria-andina.example', 'Factura'), suppliers).reason.code, 'lookalike-domain');
+  const r3 = classifyEmail(mail('ops@logcaribe.example', 'Confirmación de pago factura 123', { body: '¿Nos confirman la fecha de pago a la cuenta registrada?' }), suppliers);
+  assert.equal(r3.decision, 'confirmed', 'asking about a payment is not a bank change');
+  assert.deepEqual(documentTypes(['Certificado de existencia y representación legal.pdf']), ['chamber']);
+});

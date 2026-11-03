@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
 <title>Supplier Radar · demo</title>
-<meta name="description" content="Supplier and contract compliance automation with confidence-tiered email matching and human review.">
+<meta name="description" content="Seguimiento de documentos de proveedores: clasifica las respuestas por nivel de confianza, deja lo dudoso a una persona y calcula el estado con fechas.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Supplier Radar · supplier and contract automation">
-<meta property="og:description" content="Live demo: confidence-tiered email matching, human review for anything uncertain and a dashboard computed from dates. Built on Google Workspace, zero paid tools.">
+<meta property="og:title" content="Supplier Radar · seguimiento de proveedores">
+<meta property="og:description" content="Demo con datos ficticios: bandeja con revisión humana, ficha de cada proveedor con sus documentos y registro de decisiones. Hecho sobre Google Workspace.">
 <meta property="og:url" content="https://dsergio909.github.io/supplier-radar/">
 <meta property="og:image" content="https://dsergio909.github.io/supplier-radar/demo/og.png">
 <meta property="og:image:width" content="1200">
@@ -20,110 +20,110 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="appbar">
-  <div class="shell appbar-inner">
-    <a class="brand" href="./" aria-label="Supplier Radar">
-      <span class="mark" aria-hidden="true">SR</span>
-      <span class="name">Supplier Radar</span>
-      <span class="module" data-i18n="tagline"></span>
-    </a>
-    <nav class="tools">
-      <span class="env" data-i18n="sampleData"></span>
-      <a class="link" id="howLink" href="https://github.com/Dsergio909/supplier-radar/blob/main/docs/como-funciona.md" data-i18n="howLink"></a>
-      <div class="segmented" role="group" aria-label="Idioma / Language">
-        <button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button>
-      </div>
-      <button type="button" class="icon-btn" id="theme" aria-label="Cambiar tema">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="currentColor"/></svg>
-      </button>
-    </nav>
+<a class="skip" href="#main" data-i18n="skip"></a>
+<header class="bar">
+  <div class="bar-left">
+    <span class="app-name">Supplier Radar</span>
+    <span class="bar-sep" aria-hidden="true"></span>
+    <span class="app-module" data-i18n="module"></span>
+  </div>
+  <nav class="views" aria-label="Secciones" data-i18n-label="sections">
+    <a href="#bandeja" data-view="inbox"><span data-i18n="viewInbox"></span> <span class="badge" id="navReview"></span></a>
+    <a href="#proveedores" data-view="suppliers" data-i18n="viewSuppliers"></a>
+    <a href="#registro" data-view="log" data-i18n="viewLogShort"></a>
+  </nav>
+  <div class="bar-right">
+    <span class="sample" data-i18n="sample"></span>
+    <a id="howLink" href="https://github.com/Dsergio909/supplier-radar/blob/main/docs/como-funciona.md" data-i18n="how"></a>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button>
+    </div>
   </div>
 </header>
 
-<div class="toolbar">
-  <div class="shell toolbar-inner">
-    <ol class="stepper" id="steps">
-      <li data-step="1"><span class="num">1</span><span data-i18n="step1"></span></li>
-      <li data-step="2"><span class="num">2</span><span data-i18n="step2"></span></li>
-      <li data-step="3"><span class="num">3</span><span data-i18n="step3"></span></li>
-    </ol>
-    <p class="context" data-i18n="intro"></p>
-  </div>
-</div>
-
-<main class="shell">
-  <section class="kpis" id="kpis" aria-live="polite"></section>
-
-  <div class="work">
-    <section class="pane">
-      <header class="pane-head">
-        <div>
-          <h2 data-i18n="inbox"></h2>
-          <p class="meta" id="inboxSub"></p>
-        </div>
-        <div class="actions">
-          <button type="button" id="reset" class="btn" data-i18n="reset"></button>
-          <button type="button" id="process" class="btn primary" data-i18n="process"></button>
-        </div>
-      </header>
-      <div class="progress" id="progress" hidden><span id="progressBar"></span></div>
-      <ol id="inbox" class="rows"></ol>
-    </section>
-
-    <section class="pane review-pane">
-      <header class="pane-head">
-        <div>
-          <h2><span data-i18n="review"></span> <span id="reviewCount" class="count" hidden></span></h2>
-          <p class="meta" data-i18n="reviewHint"></p>
-        </div>
-      </header>
-      <ol id="review" class="rows"></ol>
-    </section>
-  </div>
-
-  <section class="pane">
-    <header class="pane-head split">
-      <div>
-        <h2 data-i18n="suppliers"></h2>
-        <p class="meta" data-i18n="suppliersHint"></p>
+<main id="main">
+  <!-- Bandeja -->
+  <section class="view inbox" id="view-inbox" aria-labelledby="inboxTitle">
+    <h1 class="sr-only" id="inboxTitle" data-i18n="viewInbox"></h1>
+    <div class="list-pane">
+      <div class="tabs" role="tablist" id="mailTabs">
+        <button type="button" role="tab" data-tab="review"><span data-i18n="tabReview"></span> <span class="count" id="cReview"></span></button>
+        <button type="button" role="tab" data-tab="confirmed"><span data-i18n="tabConfirmed"></span> <span class="count" id="cConfirmed"></span></button>
+        <button type="button" role="tab" data-tab="ignored"><span data-i18n="tabIgnored"></span> <span class="count" id="cIgnored"></span></button>
       </div>
-      <label class="clock">
-        <span class="clock-label"><span data-i18n="simDate"></span> <strong id="today"></strong></span>
-        <input id="dayOffset" type="range" min="0" max="120" value="0" aria-describedby="clockHint">
-        <small id="clockHint" data-i18n="clockHint"></small>
-      </label>
-    </header>
-    <div class="table-wrap">
-      <table class="grid-table">
-        <thead><tr>
-          <th data-i18n="colSupplier"></th><th data-i18n="colStatus"></th>
-          <th class="num" data-i18n="colDays"></th><th data-i18n="colDocs"></th><th data-i18n="colReason"></th>
-          <th data-i18n="colManual"></th>
-        </tr></thead>
-        <tbody id="suppliers"></tbody>
-      </table>
+      <label class="search"><span class="sr-only" data-i18n="searchMail"></span>
+        <input type="search" id="mailSearch" autocomplete="off"></label>
+      <ul class="mail-list" id="mailList"></ul>
     </div>
+    <div class="read-pane" id="readPane" tabindex="-1" aria-live="polite"></div>
   </section>
 
-  <section class="pane">
-    <header class="pane-head"><div><h2 data-i18n="howTitle"></h2><p class="meta" data-i18n="howSub"></p></div></header>
-    <div class="table-wrap">
-      <table class="grid-table rules">
-        <thead><tr><th data-i18n="colTier"></th><th data-i18n="colCondition"></th><th data-i18n="colAction"></th></tr></thead>
-        <tbody>
-          <tr><td><span class="lvl" data-tier="exact"></span></td><td data-i18n="tierExact"></td><td data-i18n="actConfirm"></td></tr>
-          <tr><td><span class="lvl" data-tier="high"></span></td><td data-i18n="tierHigh"></td><td data-i18n="actConfirm"></td></tr>
-          <tr><td><span class="lvl" data-tier="medium"></span></td><td data-i18n="tierMedium"></td><td data-i18n="actUnique"></td></tr>
-          <tr><td><span class="lvl" data-tier="low"></span></td><td data-i18n="tierLow"></td><td data-i18n="actReview"></td></tr>
-        </tbody>
+  <!-- Proveedores -->
+  <section class="view suppliers" id="view-suppliers" aria-labelledby="supTitle" hidden>
+    <div class="table-pane">
+      <div class="page-head">
+        <div>
+          <h1 id="supTitle" data-i18n="viewSuppliers"></h1>
+          <p class="sub" data-i18n="supSub"></p>
+        </div>
+        <div class="clock">
+          <label for="dayOffset"><span data-i18n="simDate"></span> <strong id="today"></strong></label>
+          <input id="dayOffset" type="range" min="0" max="120" step="1" value="0">
+        </div>
+      </div>
+      <div class="filters">
+        <div class="chips" role="group" aria-label="Estado" data-i18n-label="filterStatus" id="statusChips"></div>
+        <label class="search narrow"><span class="sr-only" data-i18n="searchSup"></span>
+          <input type="search" id="supSearch" autocomplete="off"></label>
+      </div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Tabla" data-i18n-label="tableSup">
+        <table class="grid sup-table">
+          <thead><tr>
+            <th scope="col" data-i18n="colSupplier"></th>
+            <th scope="col" data-i18n="colStatus"></th>
+            <th scope="col" class="num" data-i18n="colEnds"></th>
+            <th scope="col" data-i18n="colDocs"></th>
+            <th scope="col" data-i18n="colActivity"></th>
+          </tr></thead>
+          <tbody id="supRows"></tbody>
+        </table>
+      </div>
+      <p class="legend" id="docLegend"></p>
+    </div>
+    <div class="detail-pane" id="supDetail" tabindex="-1" aria-live="polite"></div>
+  </section>
+
+  <!-- Registro -->
+  <section class="view log" id="view-log" aria-labelledby="logTitle" tabindex="0" hidden>
+    <div class="page-head">
+      <div>
+        <h1 id="logTitle" data-i18n="viewLog"></h1>
+        <p class="sub" data-i18n="logSub"></p>
+      </div>
+    </div>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Tabla" data-i18n-label="tableLog">
+      <table class="grid log-table">
+        <thead><tr>
+          <th scope="col" data-i18n="colWhen"></th>
+          <th scope="col" data-i18n="colMail"></th>
+          <th scope="col" data-i18n="colDecision"></th>
+          <th scope="col" data-i18n="colSupplier"></th>
+          <th scope="col" data-i18n="colWho"></th>
+          <th scope="col" data-i18n="colDetail"></th>
+        </tr></thead>
+        <tbody id="logRows"></tbody>
       </table>
     </div>
   </section>
 </main>
 
-<footer class="shell footer">
+<footer class="foot">
   <span data-i18n="footer"></span>
-  <span><a href="https://github.com/Dsergio909/supplier-radar">GitHub</a> · <a href="https://dsergio909.github.io/">Sergio García</a></span>
+  <span class="foot-links">
+    <button type="button" class="link-btn" id="reset" data-i18n="reset"></button>
+    <a href="https://github.com/Dsergio909/supplier-radar" data-i18n="code"></a>
+    <a href="https://dsergio909.github.io/">Sergio García</a>
+  </span>
 </footer>
 
 <script src="../src/core/classifier.js"></script>

@@ -19,6 +19,13 @@ La memoria de mis proyectos es mi repo **privado** `Dsergio909/cerebro` (copia d
 - Nunca mi número de teléfono, claves, tokens, cédulas ni direcciones exactas. Nada interno de la empresa de mi práctica. Datos de ejemplo siempre ficticios.
 - Nada de `push --force` ni borrar ramas o repos sin mi permiso explícito.
 
+## Estado del proyecto (3-nov-2026)
+- Demo rediseñada como software de oficina: letra del sistema, azul estándar, tres pestañas (Bandeja, Proveedores, Registro). Diseño elegido por Sergio: mezcla de bandeja tipo Outlook, pregunta guiada y tabla tipo ERP con ficha.
+- Un cambio bancario, un remitente no verificado o un dominio parecido no se aplican sin confirmar por teléfono (demo y Apps Script). Se registra quién decide.
+- Documentos por tipo según el nombre del archivo; recordatorios semanales (columna remindedAt).
+- Probado con 35 correos reales que intentan engañarlo, 59 pruebas automáticas, 36 flujos en navegador y accesibilidad (axe) sin fallas.
+- Pendiente: leer el contenido de un PDF con varios documentos; probar el Apps Script en un Gmail real.
+
 ## Registro de carrera
 Al cerrar ("cierra el chat") o cuando diga "registra esto", revisa si pasó algo que cumpla al menos uno de estos criterios: terminé o entregué algo, tomé una decisión importante con su razón, obtuve un resultado concreto, aprendí una herramienta usándola de verdad, o algo falló y entendí por qué. Si nada cumple, dime "nada para registrar".
 

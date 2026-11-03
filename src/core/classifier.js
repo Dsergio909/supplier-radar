@@ -31,9 +31,9 @@
   var AUTO_REPLY = /^(re )?(respuesta automatica|automatic reply|auto ?reply|autoreply|fuera de (la )?oficina|out of (the )?office|vacaciones)/;
   // Attachment names that look like the documents procurement asks for.
   var DOCUMENT_TYPES = [
-    ['rut', /(^|[^a-z])rut([^a-z]|$)|registro unico tributario/],
-    ['chamber', /camara|(^|[^a-z])ccio([^a-z]|$)|existencia y representacion|certificado de existencia/],
-    ['bank-letter', /bancari|certificacion banc|cert banc|bank letter/],
+    ['rut', /(^|[^a-z])rut([^a-z]|$)|registro unico tributario|tax id/],
+    ['chamber', /camara|(^|[^a-z])ccio([^a-z]|$)|existencia y representacion|certificado de existencia|chamber of commerce|certificate of incorporation/],
+    ['bank-letter', /bancari|certificacion banc|cert banc|bank (letter|certificate|reference)/],
     ['policy', /poliza|policy/],
     ['id-card', /cedula|documento de identidad/],
     ['social-security', /seguridad social|parafiscal|planilla|(^|[^a-z])pila([^a-z]|$)/],
