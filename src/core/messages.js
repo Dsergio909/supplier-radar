@@ -26,6 +26,14 @@
       'auto-reply': 'respuesta automática',
       'contract-ended': 'contrato vencido hace {days} días',
       'no-reply': 'sin documentos tras {days} días',
+      'missing-docs': 'faltan {count} documentos tras {days} días',
+      'doc-rut': 'RUT',
+      'doc-chamber': 'Cámara de comercio',
+      'doc-bank-letter': 'Certificación bancaria',
+      'doc-policy': 'Póliza',
+      'doc-id-card': 'Cédula del representante legal',
+      'doc-social-security': 'Seguridad social',
+      'doc-financials': 'Estados financieros',
       'days-left': 'quedan {days} días de contrato',
       'up-to-date': 'al día'
     },
@@ -45,6 +53,14 @@
       'auto-reply': 'automatic reply',
       'contract-ended': 'contract ended {days} days ago',
       'no-reply': 'no documents after {days} days',
+      'missing-docs': '{count} documents missing after {days} days',
+      'doc-rut': 'Tax ID (RUT)',
+      'doc-chamber': 'Chamber of commerce certificate',
+      'doc-bank-letter': 'Bank letter',
+      'doc-policy': 'Insurance policy',
+      'doc-id-card': 'Legal representative ID',
+      'doc-social-security': 'Social security',
+      'doc-financials': 'Financial statements',
       'days-left': '{days} days left on contract',
       'up-to-date': 'up to date'
     }
@@ -81,7 +97,12 @@
     return parts.join(': ');
   }
 
-  var api = { LANGS: Object.keys(TEMPLATES), format: format, explain: explain, has: has };
+  /** Display name of a document type ('bank-letter' -> 'Certificación bancaria'). */
+  function docName(type, lang) {
+    return format({ code: 'doc-' + type }, lang);
+  }
+
+  var api = { LANGS: Object.keys(TEMPLATES), format: format, explain: explain, has: has, docName: docName };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;

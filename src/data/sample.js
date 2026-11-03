@@ -8,36 +8,45 @@
 
   var suppliers = [
     { id: 'S01', name: 'Papelería Andina SAS', domain: 'papeleriaandina.example', emails: ['compras@papeleriaandina.example'],
-      contractId: 'CT-2026-014', contractEnd: '2027-03-31', docsRequestedAt: '2026-09-20', docsReceivedAt: null, manualStatus: 'active' },
+      contractId: 'CT-2026-014', contractEnd: '2027-03-31', docsRequestedAt: '2026-09-20', docsReceivedAt: null, manualStatus: 'active',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: '2026-02-10', remindedAt: null },
     { id: 'S02', name: 'Logística del Caribe Ltda', domain: 'logcaribe.example', emails: ['ops@logcaribe.example'],
-      contractId: 'CT-2026-021', contractEnd: '2026-10-15', docsRequestedAt: '2026-09-25', docsReceivedAt: null, manualStatus: 'active' },
+      contractId: 'CT-2026-021', contractEnd: '2026-10-15', docsRequestedAt: '2026-09-25', docsReceivedAt: null, manualStatus: 'active',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: null, remindedAt: null },
     { id: 'S03', name: 'TecnoSoluciones Integrales', domain: 'tecnosol.example', emails: ['soporte@tecnosol.example'],
-      contractId: 'CT-2025-088', contractEnd: '2026-09-10', docsRequestedAt: '2026-08-20', docsReceivedAt: null, manualStatus: 'active' },
+      contractId: 'CT-2025-088', contractEnd: '2026-09-10', docsRequestedAt: '2026-08-20', docsReceivedAt: null, manualStatus: 'active',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: null, remindedAt: null },
     { id: 'S04', name: 'Café Origen Export', domain: 'cafeorigen.example', emails: ['contratos@cafeorigen.example'],
-      contractId: 'CT-2026-031', contractEnd: '2027-06-30', docsRequestedAt: '2026-09-26', docsReceivedAt: null, manualStatus: 'active' },
+      contractId: 'CT-2026-031', contractEnd: '2027-06-30', docsRequestedAt: '2026-09-26', docsReceivedAt: null, manualStatus: 'active',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: null, remindedAt: null },
     { id: 'S05', name: 'Impresiones Ruiz', domain: '', emails: ['impresionesruiz.demo@gmail.com'],
-      contractId: 'CT-2026-040', contractEnd: '2027-01-15', docsRequestedAt: '2026-09-15', docsReceivedAt: null, manualStatus: 'active' },
+      contractId: 'CT-2026-040', contractEnd: '2027-01-15', docsRequestedAt: '2026-09-15', docsReceivedAt: null, manualStatus: 'active',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: null, remindedAt: null },
     { id: 'S06', name: 'Nova Seguridad Privada', domain: 'novagrupo.example', emails: ['seguridad@novagrupo.example'],
-      contractId: 'CT-2026-044', contractEnd: '2026-12-31', docsRequestedAt: '2026-09-18', docsReceivedAt: null, manualStatus: 'active' },
+      contractId: 'CT-2026-044', contractEnd: '2026-12-31', docsRequestedAt: '2026-09-18', docsReceivedAt: null, manualStatus: 'active',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: null, remindedAt: '2026-09-26' },
     { id: 'S07', name: 'Nova Limpieza Industrial', domain: 'novagrupo.example', emails: ['limpieza@novagrupo.example'],
-      contractId: 'CT-2026-045', contractEnd: '2027-02-28', docsRequestedAt: '2026-09-18', docsReceivedAt: null, manualStatus: 'at-risk' },
+      contractId: 'CT-2026-045', contractEnd: '2027-02-28', docsRequestedAt: '2026-09-18', docsReceivedAt: null, manualStatus: 'at-risk',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: null, remindedAt: null },
     { id: 'S08', name: 'Mobiliario Bogotá', domain: 'mobibog.example', emails: ['ventas@mobibog.example'],
-      contractId: 'CT-2026-050', contractEnd: '2027-04-30', docsRequestedAt: '2026-08-01', docsReceivedAt: '2026-08-05', manualStatus: 'active' },
+      contractId: 'CT-2026-050', contractEnd: '2027-04-30', docsRequestedAt: '2026-08-01', docsReceivedAt: '2026-08-05', manualStatus: 'active',
+      rutAt: '2026-08-05', chamberAt: '2026-08-05', bankLetterAt: '2026-08-05', policyAt: '2026-08-05', remindedAt: null },
     { id: 'S09', name: 'Transportes Sabana', domain: 'transabana.example', emails: ['despachos@transabana.example'],
-      contractId: 'CT-2026-052', contractEnd: '2026-10-20', docsRequestedAt: null, docsReceivedAt: null, manualStatus: 'expiring' }
+      contractId: 'CT-2026-052', contractEnd: '2026-10-20', docsRequestedAt: null, docsReceivedAt: null, manualStatus: 'expiring',
+      rutAt: null, chamberAt: null, bankLetterAt: null, policyAt: null, remindedAt: null }
   ];
 
   // `expect` documents the intended outcome; the test suite checks it.
   // `senderVerified: false` simulates an email that failed SPF/DMARC (spoofed).
   var inbox = [
     { id: 'E1', from: 'Compras Papelería Andina <compras@papeleriaandina.example>', subject: 'RE: Documentos contrato CT-2026-014',
-      body: 'Buenos días, adjuntamos RUT y cámara de comercio actualizados.', attachments: ['RUT.pdf', 'camara_comercio.pdf'],
+      body: 'Buenos días,\n\nAdjuntamos RUT, cámara de comercio y certificación bancaria actualizados.\n\nCordialmente,\nÁrea de compras · Papelería Andina SAS', attachments: ['RUT.pdf', 'camara_comercio.pdf', 'certificacion_bancaria.pdf'],
       expect: { decision: 'confirmed', tier: 'exact', supplierId: 'S01' } },
     { id: 'E2', from: 'ops@logcaribe.example', subject: 'Envío certificado bancario',
       body: 'Hola, quedo atento a cualquier comentario.', attachments: ['certificado_bancario.pdf'],
       expect: { decision: 'confirmed', tier: 'high', supplierId: 'S02' } },
     { id: 'E3', from: 'Laura Méndez <laura.mendez@cafeorigen.example>', subject: 'Documentos solicitados',
-      body: 'Te comparto lo que pidieron desde compras.', attachments: ['poliza.pdf'],
+      body: 'Hola,\n\nTe comparto lo que pidieron desde compras: RUT, cámara y certificación bancaria.\n\nLaura Méndez\nCafé Origen Export', attachments: ['RUT_CafeOrigen.pdf', 'Camara_Comercio_sep2026.pdf', 'certificacion_bancaria.pdf'],
       expect: { decision: 'confirmed', tier: 'medium', supplierId: 'S04' } },
     { id: 'E4', from: 'Facturación <facturacion@novagrupo.example>', subject: 'Adjuntamos cámara de comercio',
       body: 'Cordial saludo, enviamos el documento del grupo.', attachments: ['camara.pdf'],
@@ -59,7 +68,13 @@
       expect: { decision: 'confirmed', tier: 'medium', supplierId: 'S09' } },
     { id: 'E10', from: 'Compras Papelería Andina <compras@papeleriaandina.example>', subject: 'URGENTE: cambio de cuenta bancaria CT-2026-014',
       body: 'Por favor actualicen nuestra cuenta para el próximo pago.', attachments: ['nueva_cuenta.pdf'], senderVerified: false,
-      expect: { decision: 'review', tier: 'exact', supplierId: 'S01' } }
+      expect: { decision: 'review', tier: 'exact', supplierId: 'S01' } },
+    { id: 'E11', from: 'Papelería Andina SAS <compras@papeleriandina.example>', subject: 'Actualización de datos de proveedor',
+      body: 'Buen día, por favor diligencien el formulario adjunto para mantener activo su registro.', attachments: ['formulario.pdf'],
+      expect: { decision: 'review', tier: 'low', supplierId: 'S01' } },
+    { id: 'E12', from: 'ops@logcaribe.example', subject: 'Nuevos datos bancarios para pagos',
+      body: 'Hola, a partir de este mes los pagos deben ir a la cuenta del documento adjunto.', attachments: ['cuenta_nueva.pdf'],
+      expect: { decision: 'review', tier: 'high', supplierId: 'S02' } }
   ];
 
   var api = { TODAY: TODAY, suppliers: suppliers, inbox: inbox };
