@@ -12,7 +12,7 @@ La memoria de mis proyectos es mi repo **privado** `Dsergio909/cerebro` (copia d
 
 ## Reglas mínimas (por si no se puede leer el cerebro)
 - Háblame en español, simple y paso a paso.
-- **Diseño profesional, como software empresarial.** Nada infantil ni con el «look Claude»: sin neón, pixel art, letra de videojuego o de consola, brillos, emojis de adorno ni avatares en caricatura. Estilo de Supplier Radar y Supplier Scout: IBM Plex Sans, fondo claro, barra oscura sobria (#14202a), un solo acento verde azulado (#0b6b66), bordes finos.
+- **Diseño profesional, como software empresarial.** Nada infantil ni con el «look Claude»: sin neón, pixel art, letra de videojuego o de consola, brillos, emojis de adorno ni avatares en caricatura. Estilo de Supplier Radar y Supplier Scout (desde nov-2026): letra del sistema (Segoe UI / -apple-system), fondo claro, un solo azul (#1a5fb4), bordes finos, color solo para estados, modo oscuro automático. El portafolio usa IBM Plex con banda oscura (#14202a) y verde azulado (#0b6b66), aprobado por Sergio.
 - **Antes de publicar algo visible** (diseño, textos, imágenes): muéstrame el antes y el después en capturas y espera mi «sí».
 - Prueba y audita tú mismo; comprueba con datos reales. Sin cifras inventadas. Quita lo que no sirva.
 - No vuelvas a proponer algo que ya se decidió: está en el cerebro.
