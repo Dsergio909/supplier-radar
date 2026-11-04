@@ -1,0 +1,12 @@
+Comprobante de pago de aportes
+
+Número de planilla: 0000000000
+
+Tipo de planilla: E - Empleados
+
+Período de cotización: octubre 2026
+
+Fecha de pago 2026/10/09
+
+Salud, pensión, riesgos laborales, caja de compensación
+Generado para pruebas de Suppiler Radar: No es un documento real

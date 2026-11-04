@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self'; style-src 'self'; img-src 'self' data: blob:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
 <title>Supplier Radar · demo</title>
@@ -33,6 +33,7 @@
     <a href="#registro" data-view="log" data-i18n="viewLogShort"></a>
   </nav>
   <div class="bar-right">
+    <button type="button" class="btn small" id="readerOpen" data-i18n="readBtn"></button>
     <span class="sample" data-i18n="sample"></span>
     <a id="howLink" href="https://github.com/Dsergio909/supplier-radar/blob/main/docs/como-funciona.md" data-i18n="how"></a>
     <div class="lang" role="group" aria-label="Idioma / Language">
@@ -60,10 +61,11 @@
 
   <!-- Proveedores -->
   <section class="view suppliers" id="view-suppliers" aria-labelledby="supTitle" hidden>
+    <h1 class="sr-only" id="supTitle" data-i18n="viewSuppliers"></h1>
     <div class="table-pane">
       <div class="page-head">
         <div>
-          <h1 id="supTitle" data-i18n="viewSuppliers"></h1>
+          <h2 class="page-title" aria-hidden="true" data-i18n="viewSuppliers"></h2>
           <p class="sub" data-i18n="supSub"></p>
         </div>
         <div class="clock">
@@ -117,6 +119,18 @@
   </section>
 </main>
 
+<dialog class="sheet" id="reader" aria-labelledby="rdTitle">
+  <header class="sheet-head"><h2 id="rdTitle" data-i18n="rdTitle"></h2><button type="button" class="link-btn" id="rdClose" data-i18n="close"></button></header>
+  <div class="sheet-body">
+    <p class="sub" data-i18n="rdSub"></p>
+    <label class="f"><span data-i18n="rdFile"></span><input type="file" id="rdFile" accept="image/jpeg,image/png,image/webp,application/pdf"></label>
+    <div class="rd-samples"><span class="muted" data-i18n="rdOr"></span> <span id="rdSamples"></span></div>
+    <label class="f"><span data-i18n="rdSupplier"></span><select id="rdSupplier"></select></label>
+    <p class="rd-status" id="rdStatus" role="status" aria-live="polite"></p>
+    <div id="rdResult"></div>
+  </div>
+</dialog>
+
 <footer class="foot">
   <span data-i18n="footer"></span>
   <span class="foot-links">
@@ -128,8 +142,10 @@
 
 <script src="../src/core/classifier.js"></script>
 <script src="../src/core/compliance.js"></script>
+<script src="../src/core/documents.js"></script>
 <script src="../src/core/messages.js"></script>
 <script src="../src/data/sample.js"></script>
+<script src="ocr.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

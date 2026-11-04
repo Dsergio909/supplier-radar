@@ -7,7 +7,7 @@ const path = require('node:path');
 
 const root = path.join(__dirname, '..');
 
-for (const name of ['classifier.js', 'compliance.js', 'messages.js']) {
+for (const name of ['classifier.js', 'compliance.js', 'documents.js', 'messages.js']) {
   test(`apps-script/core_${name} matches src/core/${name}`, () => {
     const source = fs.readFileSync(path.join(root, 'src', 'core', name), 'utf8');
     const copy = fs.readFileSync(path.join(root, 'apps-script', `core_${name}`), 'utf8');

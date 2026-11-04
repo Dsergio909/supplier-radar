@@ -11,6 +11,7 @@ const ROOT = path.join(__dirname, '..', '..');
 const SOURCES = [
   'src/core/classifier.js',
   'src/core/compliance.js',
+  'src/core/documents.js',
   'src/core/messages.js',
   'apps-script/Code.js'
 ];
@@ -62,11 +63,16 @@ function createSheet(name, rows = []) {
   return sheet;
 }
 
-function createAttachment(name) {
-  return { getName: () => name, copyBlob: () => ({ name }) };
+const TYPES = { pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
+
+// `text` is what Drive's OCR would read in the file (see UrlFetchApp below).
+function createAttachment(name, text = '') {
+  const type = TYPES[(name.split('.').pop() || '').toLowerCase()] || 'application/octet-stream';
+  const bytes = Array.from(Buffer.from('OCR:' + text, 'utf8'));
+  return { getName: () => name, copyBlob: () => ({ name, getContentType: () => type, getBytes: () => bytes }) };
 }
 
-function createMessage({ id, from, subject, body = '', date, attachments = [], auth = 'mx.google.com; spf=pass' }) {
+function createMessage({ id, from, subject, body = '', date, attachments = [], texts = {}, auth = 'mx.google.com; spf=pass' }) {
   return {
     getHeader: (name) => (name === 'Authentication-Results' ? auth : ''),
     getId: () => id,
@@ -74,7 +80,8 @@ function createMessage({ id, from, subject, body = '', date, attachments = [], a
     getSubject: () => subject,
     getPlainBody: () => body,
     getDate: () => date,
-    getAttachments: () => attachments.map(createAttachment)
+    getAttachments: () => attachments.map((n) => createAttachment(n, texts[n] || '')),
+    getThread: () => ({ getPermalink: () => `https://mail.google.com/mail/#all/${id}` })
   };
 }
 
@@ -126,6 +133,28 @@ function loadAdapter({ sheets = {}, threads = [], me = 'compras@miempresa.exampl
   const sent = [];
   const labels = {};
   const driveRoot = createFolder('root');
+  // Drive OCR: a multipart upload becomes a temporary Doc whose text can be exported, then deleted.
+  const docs = {};
+  const ocrCalls = [];
+  let nextId = 1;
+  const UrlFetchApp = {
+    fetch(url, opts = {}) {
+      const reply = (code, body = '') => ({ getResponseCode: () => code, getContentText: () => body });
+      if (/upload\/drive\/v3\/files\?uploadType=multipart/.test(url)) {
+        const raw = Buffer.from(opts.payload).toString('utf8');
+        const m = /OCR:([\s\S]*?)\r\n--supplier-radar-/.exec(raw);
+        const id = 'doc' + nextId++;
+        docs[id] = m ? m[1] : '';
+        ocrCalls.push({ url, auth: opts.headers && opts.headers.Authorization, ocrLanguage: /ocrLanguage=es/.test(url) });
+        return reply(200, JSON.stringify({ id }));
+      }
+      let m = /drive\/v3\/files\/([^/?]+)\/export/.exec(url);
+      if (m) return docs[m[1]] === undefined ? reply(404) : reply(200, docs[m[1]]);
+      m = /drive\/v3\/files\/([^/?]+)$/.exec(url);
+      if (m && opts.method === 'delete') { delete docs[m[1]]; return reply(204); }
+      return reply(404);
+    }
+  };
 
   const context = {
     console,
@@ -150,7 +179,13 @@ function loadAdapter({ sheets = {}, threads = [], me = 'compras@miempresa.exampl
       getEffectiveUser: () => ({ getEmail: () => me }),
       getScriptTimeZone: () => 'America/Bogota'
     },
-    Utilities: { formatDate: (date) => date.toISOString().slice(0, 16).replace('T', ' ') }
+    Utilities: {
+      formatDate: (date) => date.toISOString().slice(0, 16).replace('T', ' '),
+      getUuid: () => '00000000-0000-4000-8000-000000000000',
+      newBlob: (text) => ({ getBytes: () => Array.from(Buffer.from(String(text), 'utf8')) })
+    },
+    UrlFetchApp,
+    ScriptApp: { getOAuthToken: () => 'token-de-prueba', getProjectTriggers: () => [], deleteTrigger: () => {}, newTrigger: () => ({ timeBased: () => ({ everyHours: () => ({ create: () => {} }), everyDays: () => ({ atHour: () => ({ create: () => {} }) }) }) }) }
   };
   vm.createContext(context);
   SOURCES.forEach((file) => {
@@ -158,7 +193,7 @@ function loadAdapter({ sheets = {}, threads = [], me = 'compras@miempresa.exampl
   });
   if (now) context.now_ = () => now;
 
-  return { gas: context, book, sent, toasts, driveRoot };
+  return { gas: context, book, sent, toasts, driveRoot, docs, ocrCalls };
 }
 
 module.exports = { loadAdapter, createMessage, createThread };

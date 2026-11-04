@@ -1,0 +1,8 @@
+FACTURA ELECTRÓNICA DE VENTA No. FE-0001
+Fecha .de emisión: 01/11/2026 :
+- CUFE: 0000aaaa1111bbbb
+Cliente: EMPRESA.COMPRADORA- EJEMPLO a
+Resmas de papel carta x-10 ....... $ 150.000 5
+Subtotal: $ 150.000 IVA: $ 28:500 -
+Total a pagar: $ 178.500 ;: :
+Generado para pruebas de Supplier Radar. No-es un documento real. ;

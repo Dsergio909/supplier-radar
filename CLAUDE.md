@@ -19,12 +19,14 @@ La memoria de mis proyectos es mi repo **privado** `Dsergio909/cerebro` (copia d
 - Nunca mi número de teléfono, claves, tokens, cédulas ni direcciones exactas. Nada interno de la empresa de mi práctica. Datos de ejemplo siempre ficticios.
 - Nada de `push --force` ni borrar ramas o repos sin mi permiso explícito.
 
-## Estado del proyecto (3-nov-2026)
+## Estado del proyecto (4-nov-2026)
 - Demo rediseñada como software de oficina: letra del sistema, azul estándar, tres pestañas (Bandeja, Proveedores, Registro). Diseño elegido por Sergio: mezcla de bandeja tipo Outlook, pregunta guiada y tabla tipo ERP con ficha.
 - Un cambio bancario, un remitente no verificado o un dominio parecido no se aplican sin confirmar por teléfono (demo y Apps Script). Se registra quién decide.
-- Documentos por tipo según el nombre del archivo; recordatorios semanales (columna remindedAt).
-- Probado con 35 correos reales que intentan engañarlo, 59 pruebas automáticas, 36 flujos en navegador y accesibilidad (axe) sin fallas.
-- Pendiente: leer el contenido de un PDF con varios documentos; probar el Apps Script en un Gmail real.
+- Los documentos se leen por su contenido, no por el nombre del archivo (decisión de Sergio, 4-nov-2026: los proveedores mandan fotos y escaneos). Apps Script usa el OCR de Google Drive; la demo, Tesseract.js y PDF.js servidos desde `demo/vendor` (sin CDN). `src/core/documents.js` dice qué documento es, su fecha de expedición, si está vigente (CONFIG.MAX_AGE_DAYS: cámara/RUT/bancaria 30 días) y si el NIT coincide. Solo se aplica solo lo claro y vigente; lo demás va a la pestaña Documentos. El texto leído nunca se guarda.
+- Recordatorios semanales (columna remindedAt).
+- Prueba de estrés (4-nov, pedida por Sergio): 201 fotos difíciles de 37 documentos ficticios con diseño real en 15 situaciones (poca luz, reflejo, WhatsApp, pantalla, fax, arrugada, sello, torcida…), 91 sin usar para ajustar. Antes 101/201 bien y 1 aplicado solo con error; ahora 159/201 (79 %), los 37 limpios bien y 0 aplicados con error. La demo prepara la foto como una app de escáner (hoja, luz, líneas, inclinación, tamaño de letra) y la lee 3 veces (`Documents.readAll`). Un RUT sin NIT legible no se aplica solo; cámara y RUT no adivinan la fecha.
+- Probado con 35 correos reales que intentan engañarlo, 87 pruebas automáticas, flujos en navegador y accesibilidad (axe) sin fallas. El material de la prueba de estrés no está en el repo (solo 5 lecturas reales como fixtures).
+- Pendiente: probar el Apps Script (y el OCR de Drive) en un Gmail real.
 
 ## Registro de carrera
 Al cerrar ("cierra el chat") o cuando diga "registra esto", revisa si pasó algo que cumpla al menos uno de estos criterios: terminé o entregué algo, tomé una decisión importante con su razón, obtuve un resultado concreto, aprendí una herramienta usándola de verdad, o algo falló y entendí por qué. Si nada cumple, dime "nada para registrar".

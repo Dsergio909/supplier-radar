@@ -1,9 +1,9 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { loadAdapter, createMessage, createThread } = require('./helpers/gas-fakes');
-const { suppliers, inbox } = require('../src/data/sample');
+const { suppliers, inbox, documents } = require('../src/data/sample');
 
-const HEADERS = ['id', 'name', 'domain', 'emails', 'contractId', 'contractEnd',
+const HEADERS = ['id', 'taxId', 'name', 'domain', 'emails', 'contractId', 'contractEnd',
   'docsRequestedAt', 'docsReceivedAt', 'manualStatus', 'rutAt', 'chamberAt', 'bankLetterAt', 'policyAt', 'remindedAt'];
 const DATE_FIELDS = ['contractEnd', 'docsRequestedAt', 'docsReceivedAt', 'rutAt', 'chamberAt', 'bankLetterAt', 'policyAt', 'remindedAt'];
 const NOW = new Date('2026-09-29T17:00:00Z');
@@ -23,6 +23,7 @@ function inboxThreads() {
   const threads = inbox.map((mail) => createThread(`t-${mail.id}`, [createMessage({
     id: `m-${mail.id}`, from: mail.from, subject: mail.subject, body: mail.body,
     attachments: mail.attachments, date: new Date('2026-09-28T15:00:00Z'),
+    texts: Object.fromEntries(mail.attachments.map((n) => [n, documents[`${mail.id}/${n}`] || ''])),
     auth: mail.senderVerified === false ? 'mx.google.com; spf=fail; dmarc=fail' : 'mx.google.com; spf=pass'
   })]));
   // Our own request plus the supplier's reply in the same thread.
@@ -30,7 +31,8 @@ function inboxThreads() {
     createMessage({ id: 'm-request', from: `Compras <${ME}>`, subject: 'Solicitud de documentos — contrato CT-2026-044',
       body: 'Por favor adjunten los documentos del contrato CT-2026-044.', date: new Date('2026-09-18T13:00:00Z') }),
     createMessage({ id: 'm-reply', from: 'seguridad@novagrupo.example', subject: 'RE: Solicitud de documentos — contrato CT-2026-044',
-      body: 'Adjuntamos lo solicitado.', attachments: ['rut_nova.pdf'], date: new Date('2026-09-29T14:00:00Z') })
+      body: 'Adjuntamos lo solicitado.', attachments: ['rut_nova.pdf'], date: new Date('2026-09-29T14:00:00Z'),
+      texts: { 'rut_nova.pdf': 'FORMULARIO DEL REGISTRO ÚNICO TRIBUTARIO\nNIT: 900.000.044 - 0\nResponsabilidades, calidades y atributos: 05\nFecha generación documento PDF: 25-09-2026' } })
   ]));
   return threads;
 }
@@ -68,13 +70,29 @@ test('scanInbox logs each message once, files confirmed documents and queues the
   assert.deepEqual(review.map((r) => r[8]), ['', '', '', 'sí', 'sí', 'sí'], 'only risky rows require a phone check');
   assert.equal(review[0][4], '2 proveedores empatan con confianza media');
 
-  for (const field of ['rutAt', 'chamberAt', 'bankLetterAt']) {
-    assert.ok(isDate(env.cell('S01', field)), `S01 ${field} recorded from the attachment names`);
-  }
-  assert.ok(isDate(env.cell('S02', 'bankLetterAt')));
-  assert.equal(env.cell('S02', 'rutAt'), '', 'only the documents that arrived are recorded');
+  // Each document's date is its issue date, read from the document itself.
+  const day = (v) => (isDate(v) ? `${v.getFullYear()}-${String(v.getMonth() + 1).padStart(2, '0')}-${String(v.getDate()).padStart(2, '0')}` : v);
+  assert.deepEqual(['rutAt', 'chamberAt', 'bankLetterAt'].map((f) => day(env.cell('S01', f))), ['2026-09-24', '2026-09-25', '2026-09-26']);
+  // A bank letter from July is read, but it is too old to count: it waits in Documentos.
+  assert.equal(env.cell('S02', 'bankLetterAt'), '', 'a document older than allowed is not recorded');
+  // "Camara_Comercio_sep2026.pdf" was issued in July: the name says nothing, the content does.
+  assert.equal(env.cell('S04', 'chamberAt'), '');
+  assert.equal(day(env.cell('S04', 'rutAt')), '2026-09-22');
+  const docsSheet = env.book['Documentos'].data;
+  const docRow = (file) => docsSheet.find((r) => r[2] === file);
+  assert.match(docRow('Camara_Comercio_sep2026.pdf')[9], /^vencido: expedido hace 61 días \(máximo 30\)/);
+  assert.match(docRow('certificado_bancario.pdf')[9], /vencido/);
+  assert.equal(docRow('propuesta.pdf')[9], 'no es un documento de inscripción');
+  assert.match(docRow('RUT.pdf')[14], /^aplicado automáticamente/);
+  assert.equal(docRow('Camara_Comercio_sep2026.pdf')[14], '', 'waits for a person');
+  // Drive OCR: Spanish, authorised, and every temporary Doc deleted.
+  assert.ok(env.ocrCalls.length >= 8 && env.ocrCalls.every((c) => c.ocrLanguage && c.auth === 'Bearer token-de-prueba'));
+  assert.deepEqual(Object.keys(env.docs), [], 'temporary OCR documents are deleted');
+  // Only the reading is kept, never the text: no account numbers anywhere in the spreadsheet.
+  const everything = JSON.stringify(Object.values(env.book).map((sh) => sh.data));
+  assert.doesNotMatch(everything, /000-000000-00|abierta el|Razón social/);
 
-  for (const id of ['S01', 'S02', 'S04', 'S06']) {
+  for (const id of ['S01', 'S04', 'S06']) {
     assert.ok(isDate(env.cell(id, 'docsReceivedAt')), `${id} should have documents recorded`);
     assert.ok(env.folder(id).files.length > 0, `${id} should have a Drive folder with files`);
   }
@@ -84,6 +102,7 @@ test('scanInbox logs each message once, files confirmed documents and queues the
     assert.ok(env.folder(id).files.length > 0, `${id} attachments are still filed in Drive`);
   }
   assert.equal(env.cell('S05', 'docsReceivedAt'), '', 'review cases are not recorded automatically');
+  assert.equal(env.cell('S02', 'docsReceivedAt'), '', 'an old document does not count as an answer');
 
   const reply = env.gas.GmailApp.getMessageById('m-reply');
   assert.equal(env.cell('S06', 'docsReceivedAt'), reply.getDate());
@@ -122,7 +141,8 @@ test('sendReminders emails overdue suppliers once a week and needs the remindedA
   env.gas.sendReminders();
   env.gas.sendReminders();
   assert.deepEqual(env.sent.map((m) => m.to).sort(),
-    ['compras@papeleriaandina.example', 'impresionesruiz.demo@gmail.com', 'limpieza@novagrupo.example']);
+    ['compras@papeleriaandina.example', 'impresionesruiz.demo@gmail.com', 'limpieza@novagrupo.example', 'ventas@mobibog.example'],
+    'Mobiliario Bogotá sent its documents on 5 August: 55 days later they are too old');
   assert.match(env.sent[0].body, /RUT, Cámara de comercio, Certificación bancaria/);
   assert.equal(env.cell('S07', 'remindedAt'), NOW);
   assert.equal(env.cell('S06', 'remindedAt').toISOString().slice(0, 10), '2026-09-26', 'reminded 3 days ago: not again');
@@ -149,7 +169,11 @@ test('applyReviewDecisions applies assignments once and reports unknown ids', ()
   assert.match(applied[0], /^asignado /);
   assert.match(applied[1], /^descartado /);
   assert.equal(applied[2] || '', '');
-  assert.ok(isDate(env.cell('S07', 'docsReceivedAt')));
+  // The group's certificate carries the parent company's NIT, not S07's: filed, not counted.
+  assert.equal(env.cell('S07', 'docsReceivedAt'), '');
+  const nova = env.book['Documentos'].data.find((r) => r[2] === 'camara.pdf');
+  assert.equal(nova[10], 'NO');
+  assert.equal(nova[14], '');
   assert.deepEqual(env.folder('S07').files, ['camara.pdf'], 'attachments are filed exactly once');
   assert.equal(env.toasts.length, 2);
   assert.match(env.toasts[0], /S99/);
@@ -172,7 +196,8 @@ test('refreshDashboard computes KPIs from dates and flags stale manual statuses'
 
   const rows = env.book['Dashboard'].data;
   const kpi = Object.fromEntries(rows.slice(1, 5));
-  assert.deepEqual(kpi, { 'Vencidos': 1, 'En riesgo': 4, 'Por vencer (30 días)': 2, 'Al día': 2 });
+  assert.deepEqual(kpi, { 'Vencidos': 1, 'En riesgo': 5, 'Por vencer (30 días)': 2, 'Al día': 1 },
+    'Mobiliario Bogotá: documents from 5 August are too old on 29 September');
   const first = rows[7];
   assert.deepEqual(first, ['TecnoSoluciones Integrales', 'expired', -19, 'contrato vencido hace 19 días', 'sí',
     'RUT, Cámara de comercio, Certificación bancaria']);
@@ -205,4 +230,30 @@ test('a run is skipped while another execution holds the lock', () => {
   const env = setup({ lockFree: false });
   env.gas.scanInbox();
   assert.equal(env.book['Registro'], undefined);
+});
+
+test('a person confirms a document in the Documentos tab; the date written is the issue date', () => {
+  const env = setup();
+  env.gas.scanInbox();
+  const sheet = env.book['Documentos'];
+  const header = sheet.data[0];
+  const confirm = header.indexOf('Confirmar (tipo de documento o "no")') + 1;
+  const applied = header.indexOf('Aplicado');
+  const rowOf = (file) => sheet.data.findIndex((r) => r[2] === file) + 1;
+  sheet.getRange(rowOf('certificacion_bancaria.pdf'), confirm).setValue('certificación bancaria'); // E3, medium confidence → already applied
+  sheet.getRange(rowOf('propuesta.pdf'), confirm).setValue('no');
+  sheet.getRange(rowOf('tarifas_2027.xlsx'), confirm).setValue('algo raro');
+  env.gas.applyDocumentDecisions();
+  assert.match(sheet.data[rowOf('propuesta.pdf') - 1][applied], /^descartado /);
+  assert.equal(sheet.data[rowOf('tarifas_2027.xlsx') - 1][applied] || '', '');
+  assert.match(env.toasts.join(' '), /No entendí el documento/);
+});
+
+test('with READ_DOCUMENTS off it goes by file names, as before', () => {
+  const env = setup();
+  env.gas.CONFIG.READ_DOCUMENTS = false;
+  env.gas.scanInbox();
+  assert.ok(isDate(env.cell('S02', 'bankLetterAt')), 'by name, the July letter counts again (the old behaviour)');
+  assert.equal(env.ocrCalls.length, 0);
+  assert.equal(env.book['Documentos'], undefined);
 });

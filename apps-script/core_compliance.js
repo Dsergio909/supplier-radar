@@ -50,23 +50,42 @@
   }
 
   /**
-   * Required documents plus any other one on file, each with the day it arrived and
-   * whether it answers the latest request (a copy sent before the request is stale).
+   * Required documents plus any other one on file, each with its date and whether it is good.
+   *
+   * With options.today and options.maxAgeDays ({ chamber: 30, ... }) the date is the document's
+   * issue date (read from the document itself) and it is good while it is recent enough:
+   * a Chamber certificate issued 20 days ago is fine even if it came before the request.
+   * Without them, the date is when it arrived and it must answer the latest request.
+   * A policy is good until its policyUntil date, when that column exists.
    */
   function documentChecklist(supplier, options) {
     var opts = optionsWith(options);
     var requested = toDay(supplier.docsRequestedAt);
+    var now = toDay(opts.today);
     return DOC_TYPES.filter(function (t) {
       return opts.requiredDocuments.indexOf(t) >= 0 || toDay(supplier[DOC_FIELDS[t]]) !== null;
     }).map(function (t) {
       var received = toDay(supplier[DOC_FIELDS[t]]);
-      return {
+      var maxAge = opts.maxAgeDays && opts.maxAgeDays[t];
+      var item = {
         type: t,
         field: DOC_FIELDS[t],
         required: opts.requiredDocuments.indexOf(t) >= 0,
         receivedAt: received === null ? null : new Date(received).toISOString().slice(0, 10),
-        ok: received !== null && (requested === null || received >= requested)
+        ok: received !== null && (requested === null || received >= requested),
+        ageDays: null,
+        tooOld: false
       };
+      if (received !== null && now !== null && maxAge) {
+        item.ageDays = daysBetween(received, now);
+        item.tooOld = item.ageDays > maxAge;
+        item.ok = !item.tooOld;
+      }
+      if (t === 'policy' && now !== null && toDay(supplier.policyUntil) !== null && toDay(supplier.policyUntil) < now) {
+        item.ok = false;
+        item.tooOld = true;
+      }
+      return item;
     });
   }
 

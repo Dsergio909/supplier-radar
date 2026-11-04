@@ -1,0 +1,164 @@
+Comprobante de pago de aportes
+Operador de información Ejemplo S.A. (ficticio)
+
+-Aportante 2 idemtificación | Número depiani | Tipo de planilla
+| PAPELERÍA EJEMPLO ANDINAS.A.S..|NI900.123.456-8 | 9400000000 | E - Empleados
+Período pensión Período salud | Fecha de pago ] | Fecha límite de pago O]
+2026-09 2026-10 [2026-10-09 | 2026-10-14
+| Subsistema o Administradora Valor
+Pensión o AFP Ejemplo | $ 1.200.000
+Salud OS EPS Ejemplo $ 640.000
+Riesgos laborales o ARL Ejemplo $ 78.300 ] o ]
+Caja de compensación Caja Ejemplo $ 300.000
+Total nanado NS $2218 200
+
+Planilla integrada de liquidación de aportes (PILA). Este comprobante es válido como soporte de pago.
+
+Documento ficticio generado para pruebas de Suppher Radar. No es un documento real
+
+
+=====
+Comprobante de pago de aportes
+
+Operador de información Ejemplo S.A. (ficticio)
+
+>
+
+=
+
+e E8
+
+CA A
+
+Jana
+
+| Aportante
+
+| identificación
+
+_| Número de
+
+prañm
+
+Lio dep
+
+PAPELERÍA EJEMPLO ANDINA S.A.S. y
+
+| NI 900.123.456-8
+
+[8400000000
+
+| E - Empleados
+
+=
+
+Pe
+
+nuu
+
+sl co al
+
+O pensión
+
+Período salud
+
+| Fecha de pago
+
+| Fecha límite de pago
+
+2026-09
+
+2026-10
+
+| 2026-10-09
+
+| 2026-10-14
+
+ich
+
+Sub
+
+A
+
+=i=i*ma
+
+Adminisiradora
+
+|. Valor
+
+Pensión
+
+AFP Ejemplo
+
+$1,200.00
+
+—
+
+Salud
+
+$ 640.000
+
+EPS Ejemplo
+
+Riesgos laborales
+
+ARL Ejemplo
+
+$78.300.
+
+Caja de compensación
+
+| Caja Ejemplo
+
+$ 300.000
+
+Total nanada
+
+$ 2.218.200
+
+A
+
+Planilla integrada de liquidación de aportes (PILA). Este comprobante es válido como soporte de pago.
+
+Documento ficticio generado para pruebas de Suppher Radar. No es un documento real
+
+=====
+Comprobante de
+
+Operador de información Ejemplo
+
+Pago de aportes
+
+O S.A. (ficticio)
+
+Aportante
+
+Identificación
+PAPELERÍA EJEMPLO ANDINA S.A.S.
+
+Número de planilla
+NI 900.123.456-8
+
+2400000000 E- Empleados
+Período pensión Período salud Fecha de pago Fecha límite de pago
+2026-09 2026-10 2026-10-09 2026-10-14
+Subsistema
+
+Administradora Valor
+Pensión AFP Ejemplo $1.200.000
+Salud $ 640.000
+$78.300
+$ 300.000
+$2.218.300
+
+Tipo de planilla
+
+EPS Ejemplo
+Riesgos laborales ARL Ejemplo
+[Caja de Compensación Caja Ejemplo
+Total pagado
+
+Planilla integrada de liquidación de
+
+Aportes (PILA). Este comprobante es válido como soporte de pago.
+

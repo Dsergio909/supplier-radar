@@ -34,6 +34,21 @@
       'doc-id-card': 'Cédula del representante legal',
       'doc-social-security': 'Seguridad social',
       'doc-financials': 'Estados financieros',
+      'doc-invoice': 'Factura',
+      'doc-quote': 'Cotización',
+      'docst-ok': 'vigente',
+      'docst-ok-age': 'vigente: expedido hace {days} días (máximo {max})',
+      'docst-too-old': 'vencido: expedido hace {days} días (máximo {max}). Pide uno nuevo',
+      'docst-policy-ok': 'vigente hasta {date}',
+      'docst-expired': 'vencido el {date}. Pide uno nuevo',
+      'docst-no-date': 'no encontré la fecha de expedición: revísala en el documento',
+      'docst-not-registration': 'no es un documento de inscripción',
+      'docst-unknown': 'no reconozco el documento: revísalo',
+      'docst-cover-note': 'es una nota que menciona documentos, no un documento',
+      'docst-guessed': ' (la fecha no estaba rotulada: es la más reciente del documento)',
+      'docst-disagree': ' (el texto se leyó distinto en la fecha: confírmala en el documento)',
+      'docev-content': 'dice «{phrases}»',
+      'docev-file-name': 'solo por el nombre del archivo: no se pudo leer el contenido',
       'days-left': 'quedan {days} días de contrato',
       'up-to-date': 'al día'
     },
@@ -61,6 +76,21 @@
       'doc-id-card': 'Legal representative ID',
       'doc-social-security': 'Social security',
       'doc-financials': 'Financial statements',
+      'doc-invoice': 'Invoice',
+      'doc-quote': 'Quote',
+      'docst-ok': 'valid',
+      'docst-ok-age': 'valid: issued {days} days ago (maximum {max})',
+      'docst-too-old': 'too old: issued {days} days ago (maximum {max}). Ask for a new one',
+      'docst-policy-ok': 'valid until {date}',
+      'docst-expired': 'expired on {date}. Ask for a new one',
+      'docst-no-date': 'issue date not found: check it on the document',
+      'docst-not-registration': 'not a registration document',
+      'docst-unknown': 'document not recognised: check it',
+      'docst-cover-note': 'a note that mentions documents, not a document',
+      'docst-guessed': ' (the date was not labelled: it is the most recent one in the document)',
+      'docst-disagree': ' (the date read differently each time: check it on the document)',
+      'docev-content': 'it says “{phrases}”',
+      'docev-file-name': 'by file name only: the content could not be read',
       'days-left': '{days} days left on contract',
       'up-to-date': 'up to date'
     }
@@ -102,7 +132,50 @@
     return format({ code: 'doc-' + type }, lang);
   }
 
-  var api = { LANGS: Object.keys(TEMPLATES), format: format, explain: explain, has: has, docName: docName };
+  /** What a person should know about a document read (Documents.read result or one of its documents). */
+  function documentStatus(doc, lang) {
+    var guessed = doc.dateFrom === 'latest' ? format({ code: 'docst-guessed' }, lang) : '';
+    if (doc.datesDisagree && (doc.status === 'ok' || doc.status === 'too-old' || doc.status === 'expired')) guessed += format({ code: 'docst-disagree' }, lang);
+    switch (doc.status) {
+      case 'ok':
+        if (doc.validUntil) return format({ code: 'docst-policy-ok', date: doc.validUntil }, lang) + guessed;
+        if (doc.ageDays !== null && doc.ageDays !== undefined) return format({ code: 'docst-ok-age', days: doc.ageDays, max: doc.maxAgeDays }, lang) + guessed;
+        return format({ code: 'docst-ok' }, lang);
+      case 'too-old': return format({ code: 'docst-too-old', days: doc.ageDays, max: doc.maxAgeDays }, lang) + guessed;
+      case 'expired': return format({ code: 'docst-expired', date: doc.validUntil }, lang) + guessed;
+      case 'no-date': return format({ code: 'docst-no-date' }, lang);
+      case 'not-registration': return format({ code: 'docst-not-registration' }, lang);
+      default: return format({ code: doc.coverNote ? 'docst-cover-note' : 'docst-unknown' }, lang);
+    }
+  }
+
+  function confidenceName(level, lang) {
+    return (TIER_NAMES[lang] || TIER_NAMES.en)[level] || '';
+  }
+
+  /** Why the reader thinks so: the phrases it found, or only the file name. */
+  function documentEvidence(source, phrases, lang) {
+    if (source === 'file-name') return format({ code: 'docev-file-name' }, lang);
+    if (!phrases || !phrases.length) return '';
+    return format({ code: 'docev-content', phrases: phrases.slice(0, 2).join(lang === 'en' ? '”, “' : '», «') }, lang);
+  }
+
+  // What a person may type to confirm a document ("RUT", "cámara", "certificación bancaria"...).
+  var TYPE_WORDS = [
+    ['rut', /^(rut|registro unico tributario|tax id)/], ['chamber', /^(camara|ccio|certificado de existencia|chamber)/],
+    ['bank-letter', /(bancari|bank)/], ['policy', /^(poliza|policy)/], ['id-card', /^(cedula|documento de identidad|id)/],
+    ['social-security', /^(seguridad social|pila|planilla|social security)/], ['financials', /(financier|balance|financial)/]
+  ];
+
+  /** Document type from what a person typed, or null. */
+  function docTypeFromName(text) {
+    var t = String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    for (var i = 0; i < TYPE_WORDS.length; i++) if (TYPE_WORDS[i][1].test(t)) return TYPE_WORDS[i][0];
+    return null;
+  }
+
+  var api = { LANGS: Object.keys(TEMPLATES), format: format, explain: explain, has: has, docName: docName,
+    documentStatus: documentStatus, confidenceName: confidenceName, documentEvidence: documentEvidence, docTypeFromName: docTypeFromName };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;
